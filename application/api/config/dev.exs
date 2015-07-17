@@ -31,5 +31,5 @@ config :api, Api.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "api_dev",
+  database: "cyan",
   size: 10 # The amount of database connections in the pool

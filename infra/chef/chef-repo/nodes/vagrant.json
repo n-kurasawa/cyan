@@ -1,10 +1,9 @@
 {
-  "run_list": [
-    "nginx",
-    "elixir",
-    "postgresql",
-    "nodejs"
-  ],
+  "postgresql": {
+    "password": {
+      "postgres": "postgres"
+    }
+  },
   "nginx": {
     "do_not_cache": 1
   },
@@ -13,5 +12,15 @@
   },
   "automatic": {
     "ipaddress": "vagrant"
-  }
+  },
+  "run_list": [
+    "nginx",
+    "elixir",
+    "postgresql",
+    "postgresql::server",
+    "nodejs",
+    "setuser",
+    "database::postgresql",
+    "setdb::database"
+  ]
 }
