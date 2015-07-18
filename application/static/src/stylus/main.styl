@@ -1,5 +1,47 @@
 @import 'nib'
 
+cyan = "#00ffff"
+
 body
   margin: 0
+  padding: 0
+
+.form-signin
+  max-width: 330px
+  padding: 15px
+  margin: 0 auto
+  .form-signin-heading
+    margin-bottom: 10px
+  .form-control
+    position: relative
+    height: auto
+    box-sizing: border-box
+    padding: 10px
+    font-size: 16px
+  input[type="email"]
+    margin-bottom: -1px
+    border-bottom-right-radius: 0
+    border-bottom-left-radius: 0
+  input[type="password"]
+    margin-bottom: 10px
+    border-top-left-radius: 0
+    border-top-right-radius: 0
+
+.eventList
+  padding: 0
+  .panel-body
+    padding 0 10px 0 10px
+  .eventItem
+    .item-head
+      clearfix()
+      .userName
+        float: left
+        margin-right: 10px
+      .date
+        float: left
+    .title
+      margin-top: 10px
+      font-size: 16px
+      text-align: center
+.eventCreator
   padding: 0

@@ -14,8 +14,8 @@ defmodule Api.Router do
 
   scope "/api", Api do
     pipe_through :api
-    resources "/scores", ScoreController
     resources "/events", EventController
+    post "/login", AuthController, :login
   end
 
   # scope "/api", Api do

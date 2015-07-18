@@ -2,3 +2,62 @@ body {
   margin: 0;
   padding: 0;
 }
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading {
+  margin-bottom: 10px;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.eventList {
+  padding: 0;
+}
+.eventList .panel-body {
+  padding: 0 10px 0 10px;
+}
+.eventList .eventItem .item-head {
+  zoom: 1;
+}
+.eventList .eventItem .item-head:before,
+.eventList .eventItem .item-head:after {
+  content: "";
+  display: table;
+}
+.eventList .eventItem .item-head:after {
+  clear: both;
+}
+.eventList .eventItem .item-head .userName {
+  float: left;
+  margin-right: 10px;
+}
+.eventList .eventItem .item-head .date {
+  float: left;
+}
+.eventList .eventItem .title {
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+.eventCreator {
+  padding: 0;
+}

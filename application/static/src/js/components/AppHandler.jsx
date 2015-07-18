@@ -10,8 +10,16 @@ export default class AppHandler extends React.Component {
   render() {
     return (
       <div>
-        <h1>Cyan</h1>
-        <RouteHandler/>
+        <nav className="navbar navbar-default">
+          <div className="navbar-header">
+            <a className="navbar-brand headtitle" href="#">Cyan</a>
+          </div>
+        </nav>
+        <div className="container">
+          <FluxComponent>
+            <RouteHandler/>
+          </FluxComponent>
+        </div>
       </div>
     );
   }
