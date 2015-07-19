@@ -10,7 +10,6 @@ export default class EventList extends React.Component {
 
   render() {
     var events = this.props.events;
-    console.log(events);
 
     var items = [];
     events.forEach((event)=> {
@@ -39,8 +38,8 @@ class EventItem extends React.Component {
     return (
       <li className="eventItem list-group-item">
         <div className="item-head">
-          <div className="userName">開催者: {this.props.event.user.name}</div>
-          <div className="date">日付: {this.props.event.date}</div>
+          <div className="userName">主催者: {this.props.event.user.name}</div>
+          <div className="date">開催日: {this.props.event.date}</div>
         </div>
         <div className="title">
           <Link to={`/events/${this.props.event.id}`}>{this.props.event.title}</Link>

@@ -26878,7 +26878,7 @@ var Flux = (function (_Flummox) {
 exports['default'] = Flux;
 module.exports = exports['default'];
 
-},{"./actions/AuthActions":229,"./actions/EventActions":230,"./stores/AuthStore":242,"./stores/EventStore":243,"flummox":4}],229:[function(require,module,exports){
+},{"./actions/AuthActions":229,"./actions/EventActions":230,"./stores/AuthStore":243,"./stores/EventStore":244,"flummox":4}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27060,7 +27060,7 @@ router.run(function (Handler, state) {
 
 exports.router = router;
 
-},{"../Flux":228,"../routes":241,"flummox/component":2,"react":227,"react-router":40}],232:[function(require,module,exports){
+},{"../Flux":228,"../routes":242,"flummox/component":2,"react":227,"react-router":40}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27236,8 +27236,11 @@ var EventCreator = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(EventCreator.prototype), "constructor", this).call(this, props);
     this.state = {
+      date: props.date,
       title: props.title,
-      date: props.date
+      description: props.title,
+      document: props.document,
+      max: props.max
     };
   }
 
@@ -27259,17 +27262,67 @@ var EventCreator = (function (_React$Component) {
           { className: "panel-body" },
           _react2["default"].createElement(
             "div",
-            { className: "date" },
+            { className: "item date" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "開催日"
+            ),
             _react2["default"].createElement("input", { type: "date", value: this.state.date, onChange: this.handelChangeDate.bind(this) })
           ),
           _react2["default"].createElement(
             "div",
-            { className: "titl" },
-            _react2["default"].createElement("input", { type: "text", placeholder: "title", value: this.state.title, onChange: this.handelChangeTitle.bind(this) })
+            { className: "item title" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "タイトル"
+            ),
+            _react2["default"].createElement("input", { type: "text", value: this.state.title, onChange: this.handelChangeTitle.bind(this) })
           ),
           _react2["default"].createElement(
             "div",
-            null,
+            { className: "item title" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "最大人数"
+            ),
+            _react2["default"].createElement("input", { type: "text", value: this.state.max, onChange: this.handelChangeMax.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "item place" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "会場"
+            ),
+            _react2["default"].createElement("input", { type: "text", value: this.state.place, onChange: this.handelChangePlace.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "item description" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "詳細"
+            ),
+            _react2["default"].createElement("textarea", { value: this.state.description, onChange: this.handelChangeDescription.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "item document" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "資料"
+            ),
+            _react2["default"].createElement("input", { type: "file", value: this.state.document, onChange: this.handelChangeDocument.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "btn_area" },
             _react2["default"].createElement(
               "button",
               { className: "btn btn-default", onClick: this.handleSubmit.bind(this) },
@@ -27284,10 +27337,14 @@ var EventCreator = (function (_React$Component) {
     value: function handleSubmit() {
       var event = {
         title: this.state.title,
-        date: this.state.date
+        date: this.state.date,
+        max: this.state.max,
+        place: this.state.place,
+        description: this.state.description,
+        document: this.state.document
       };
       this.props.flux.getActions("event").createEvent(event);
-      this.setState({ title: "", date: "" });
+      this.setState({ title: "", date: "", max: "", place: "", description: "", document: "" });
     }
   }, {
     key: "handelChangeTitle",
@@ -27295,9 +27352,29 @@ var EventCreator = (function (_React$Component) {
       this.setState({ title: e.target.value });
     }
   }, {
+    key: "handelChangeMax",
+    value: function handelChangeMax(e) {
+      this.setState({ max: e.target.value });
+    }
+  }, {
+    key: "handelChangePlace",
+    value: function handelChangePlace(e) {
+      this.setState({ place: e.target.value });
+    }
+  }, {
     key: "handelChangeDate",
     value: function handelChangeDate(e) {
       this.setState({ date: e.target.value });
+    }
+  }, {
+    key: "handelChangeDescription",
+    value: function handelChangeDescription(e) {
+      this.setState({ description: e.target.value });
+    }
+  }, {
+    key: "handelChangeDocument",
+    value: function handelChangeDocument(e) {
+      this.setState({ document: e.target.value });
     }
   }]);
 
@@ -27306,7 +27383,7 @@ var EventCreator = (function (_React$Component) {
 
 exports["default"] = EventCreator;
 
-EventCreator.defaultProps = { title: "", date: "" };
+EventCreator.defaultProps = { title: "", date: "", max: "", place: "", description: "", document: "" };
 module.exports = exports["default"];
 
 },{"flummox/component":2,"react":227}],235:[function(require,module,exports){
@@ -27360,13 +27437,13 @@ var EventDetail = (function (_React$Component) {
             _react2["default"].createElement(
               "div",
               { className: "userName" },
-              "開催者: ",
+              "主催者: ",
               event.user.name
             ),
             _react2["default"].createElement(
               "div",
               { className: "date" },
-              "日付: ",
+              "開催日: ",
               event.date,
               " "
             )
@@ -27382,18 +27459,33 @@ var EventDetail = (function (_React$Component) {
           { className: "panel-body" },
           _react2["default"].createElement(
             "div",
-            { className: "description" },
-            "詳細"
+            { className: "item-detail place" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-detail-head" },
+              "会場"
+            ),
+            event.place
           ),
           _react2["default"].createElement(
             "div",
-            { className: "document" },
-            "資料"
+            { className: "item-detail description" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-detail-head" },
+              "詳細"
+            ),
+            event.description
           ),
           _react2["default"].createElement(
             "div",
-            { className: "others" },
-            "その他"
+            { className: "item-detail description" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-detail-head" },
+              "資料"
+            ),
+            "資料なし"
           )
         )
       );
@@ -27447,6 +27539,10 @@ var _ParticipantListJsx = require('./ParticipantList.jsx');
 
 var _ParticipantListJsx2 = _interopRequireDefault(_ParticipantListJsx);
 
+var _FeedJsx = require('./Feed.jsx');
+
+var _FeedJsx2 = _interopRequireDefault(_FeedJsx);
+
 var EventHandler = (function (_React$Component) {
   function EventHandler(props) {
     _classCallCheck(this, EventHandler);
@@ -27474,6 +27570,11 @@ var EventHandler = (function (_React$Component) {
           _flummoxComponent2['default'],
           { connectToStores: ['event'] },
           _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: event_id })
+        ),
+        _react2['default'].createElement(
+          _flummoxComponent2['default'],
+          { connectToStores: ['event'] },
+          _react2['default'].createElement(_FeedJsx2['default'], { event_id: event_id })
         )
       );
     }
@@ -27485,7 +27586,7 @@ var EventHandler = (function (_React$Component) {
 exports['default'] = EventHandler;
 module.exports = exports['default'];
 
-},{"./EventDetail.jsx":235,"./ParticipantList.jsx":240,"flummox/component":2,"react":227}],237:[function(require,module,exports){
+},{"./EventDetail.jsx":235,"./Feed.jsx":238,"./ParticipantList.jsx":241,"flummox/component":2,"react":227}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27526,7 +27627,6 @@ var EventList = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var events = this.props.events;
-      console.log(events);
 
       var items = [];
       events.forEach(function (event) {
@@ -27576,13 +27676,13 @@ var EventItem = (function (_React$Component2) {
           _react2['default'].createElement(
             'div',
             { className: 'userName' },
-            '開催者: ',
+            '主催者: ',
             this.props.event.user.name
           ),
           _react2['default'].createElement(
             'div',
             { className: 'date' },
-            '日付: ',
+            '開催日: ',
             this.props.event.date
           )
         ),
@@ -27605,6 +27705,75 @@ var EventItem = (function (_React$Component2) {
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],238:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flummoxComponent = require("flummox/component");
+
+var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var Feed = (function (_React$Component) {
+  function Feed(props) {
+    _classCallCheck(this, Feed);
+
+    _get(Object.getPrototypeOf(Feed.prototype), "constructor", this).call(this, props);
+  }
+
+  _inherits(Feed, _React$Component);
+
+  _createClass(Feed, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "feed panel panel-default col-md-7" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          "フィード"
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement("input", { className: "comment", type: "text", placeholder: "コメント" }),
+          _react2["default"].createElement(
+            "div",
+            { className: "btn_area" },
+            _react2["default"].createElement(
+              "button",
+              { className: "btn btn-default" },
+              "投稿する"
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Feed;
+})(_react2["default"].Component);
+
+exports["default"] = Feed;
+module.exports = exports["default"];
+
+},{"flummox/component":2,"react":227}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27673,7 +27842,7 @@ var HomeHandler = (function (_React$Component) {
 exports['default'] = HomeHandler;
 module.exports = exports['default'];
 
-},{"./EventCreator.jsx":234,"./EventList.jsx":237,"flummox/component":2,"react":227}],239:[function(require,module,exports){
+},{"./EventCreator.jsx":234,"./EventList.jsx":237,"flummox/component":2,"react":227}],240:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27760,7 +27929,7 @@ exports["default"] = LoginHandler;
 LoginHandler.defaultProps = { loginId: "", pass: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],240:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27853,7 +28022,7 @@ var Participant = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],241:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27898,7 +28067,7 @@ exports['default'] = _react2['default'].createElement(
 );
 module.exports = exports['default'];
 
-},{"./components/AppHandler.jsx":232,"./components/AuthCheck.jsx":233,"./components/EventHandler.jsx":236,"./components/HomeHandler.jsx":238,"./components/LoginHandler.jsx":239,"react":227,"react-router":40}],242:[function(require,module,exports){
+},{"./components/AppHandler.jsx":232,"./components/AuthCheck.jsx":233,"./components/EventHandler.jsx":236,"./components/HomeHandler.jsx":239,"./components/LoginHandler.jsx":240,"react":227,"react-router":40}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27944,7 +28113,7 @@ var AuthStore = (function (_Store) {
 exports['default'] = AuthStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],243:[function(require,module,exports){
+},{"flummox":4}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

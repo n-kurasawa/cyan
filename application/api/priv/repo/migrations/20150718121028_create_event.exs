@@ -7,6 +7,9 @@ defmodule Api.Repo.Migrations.CreateEvent do
       add :user_id, :integer
       add :date, :date
       add :max, :integer
+      add :description, :string
+      add :document_url, :string
+      add :place, :string
 
       timestamps
     end

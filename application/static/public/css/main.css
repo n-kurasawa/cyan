@@ -61,6 +61,24 @@ body {
 .eventCreator {
   padding: 0;
 }
+.eventCreator .item {
+  margin-bottom: 15px;
+}
+.eventCreator .item .item-title {
+  margin-bottom: 5px;
+  width: 70px;
+}
+.eventCreator .description textarea {
+  width: 250px;
+  height: 100px;
+}
+.eventCreator .item .document .item-title {
+  margin-bottom: 10px;
+}
+.eventCreator .btn_area {
+  margin-top: 15px;
+  text-align: center;
+}
 .participantList {
   padding: 0;
 }
@@ -89,4 +107,26 @@ body {
   margin-top: 10px;
   font-size: 32px;
   text-align: center;
+}
+.eventDetail .place {
+  margin-top: 20px;
+}
+.eventDetail .item-detail {
+  margin-bottom: 50px;
+}
+.eventDetail .item-detail .item-detail-head {
+  border-bottom: 2px solid #dadada;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.feed {
+  padding: 0;
+}
+.feed .comment {
+  width: 100%;
+}
+.feed .btn_area {
+  margin-top: 10px;
+  text-align: right;
 }

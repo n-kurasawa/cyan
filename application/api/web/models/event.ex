@@ -6,6 +6,9 @@ defmodule Api.Event do
     field :title, :string
     field :date, Ecto.Date
     field :max, :integer
+    field :description, :string
+    field :document_url, :string
+    field :place, :string
 
     belongs_to :user, Api.User, foreign_key: :user_id
 
@@ -13,7 +16,7 @@ defmodule Api.Event do
   end
 
   @required_fields ~w(title user_id date)
-  @optional_fields ~w(max)
+  @optional_fields ~w(max description document_url place)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

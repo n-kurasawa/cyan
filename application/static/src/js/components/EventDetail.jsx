@@ -13,20 +13,23 @@ export default class EventDetail extends React.Component {
       <div className="eventDetail panel panel-default col-md-7">
         <div className="panel-heading">
           <div className="item-head">
-            <div className="userName">開催者: {event.user.name}</div>
-            <div className="date">日付: {event.date} </div>
+            <div className="userName">主催者: {event.user.name}</div>
+            <div className="date">開催日: {event.date} </div>
           </div>
           <div className="title">{event.title}</div>
         </div>
         <div className="panel-body">
-          <div className="description">
-            詳細
+          <div className="item-detail place">
+            <div className="item-detail-head">会場</div>
+            {event.place}
           </div>
-          <div className="document">
-            資料
+          <div className="item-detail description">
+            <div className="item-detail-head">詳細</div>
+            {event.description}
           </div>
-          <div className="others">
-            その他
+          <div className="item-detail description">
+            <div className="item-detail-head">資料</div>
+            資料なし
           </div>
         </div>
       </div>
