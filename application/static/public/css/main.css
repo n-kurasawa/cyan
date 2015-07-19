@@ -150,3 +150,14 @@ body {
   margin-top: 10px;
   text-align: right;
 }
+.feed .feedItem div {
+  margin-bottom: 5px;
+}
+.feed .feedItem div .user {
+  font-weight: bold;
+  font-size: 14px;
+}
+.feed .feedItem div .date {
+  color: #808080;
+  font-size: 13px;
+}

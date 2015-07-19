@@ -23,6 +23,8 @@ defmodule Api.Router do
     post "/login", AuthController, :login
     get "/login/user", AuthController, :loginUser
     get "/login/check", AuthController, :check
+    get "/feeds/:event_id", FeedController, :index
+    post "/feeds/:event_id", FeedController, :create
   end
 
   # scope "/api", Api do

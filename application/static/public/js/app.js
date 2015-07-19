@@ -26867,6 +26867,14 @@ var _storesParticipantStore = require('./stores/ParticipantStore');
 
 var _storesParticipantStore2 = _interopRequireDefault(_storesParticipantStore);
 
+var _actionsFeedActions = require('./actions/FeedActions');
+
+var _actionsFeedActions2 = _interopRequireDefault(_actionsFeedActions);
+
+var _storesFeedStore = require('./stores/FeedStore');
+
+var _storesFeedStore2 = _interopRequireDefault(_storesFeedStore);
+
 var Flux = (function (_Flummox) {
   function Flux() {
     _classCallCheck(this, Flux);
@@ -26878,6 +26886,8 @@ var Flux = (function (_Flummox) {
     this.createStore('auth', _storesAuthStore2['default'], this);
     this.createActions('participant', _actionsParticipantActions2['default']);
     this.createStore('participant', _storesParticipantStore2['default'], this);
+    this.createActions('feed', _actionsFeedActions2['default']);
+    this.createStore('feed', _storesFeedStore2['default'], this);
   }
 
   _inherits(Flux, _Flummox);
@@ -26888,7 +26898,7 @@ var Flux = (function (_Flummox) {
 exports['default'] = Flux;
 module.exports = exports['default'];
 
-},{"./actions/AuthActions":229,"./actions/EventActions":230,"./actions/ParticipantActions":231,"./stores/AuthStore":244,"./stores/EventStore":245,"./stores/ParticipantStore":246,"flummox":4}],229:[function(require,module,exports){
+},{"./actions/AuthActions":229,"./actions/EventActions":230,"./actions/FeedActions":231,"./actions/ParticipantActions":232,"./stores/AuthStore":245,"./stores/EventStore":246,"./stores/FeedStore":247,"./stores/ParticipantStore":248,"flummox":4}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26955,7 +26965,6 @@ var AuthActions = (function (_Actions) {
         }
         return response.json();
       }).then(function (json) {
-        console.log(json.user);
         return json.user;
       });
     }
@@ -26967,7 +26976,7 @@ var AuthActions = (function (_Actions) {
 exports['default'] = AuthActions;
 module.exports = exports['default'];
 
-},{"../components/App.jsx":232,"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
+},{"../components/App.jsx":233,"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27079,6 +27088,79 @@ var _flummox = require('flummox');
 
 require('isomorphic-fetch');
 
+var FeedActions = (function (_Actions) {
+  function FeedActions() {
+    _classCallCheck(this, FeedActions);
+
+    _get(Object.getPrototypeOf(FeedActions.prototype), 'constructor', this).call(this);
+  }
+
+  _inherits(FeedActions, _Actions);
+
+  _createClass(FeedActions, [{
+    key: 'fetchAll',
+    value: function fetchAll(event_id) {
+      return fetch('http://' + location.host + '/api/feeds/' + event_id, {
+        method: 'get',
+        credentials: 'same-origin'
+      }).then(function (response) {
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (feeds) {
+        return feeds;
+      });
+    }
+  }, {
+    key: 'createFeed',
+    value: function createFeed(feed, fetchAll) {
+      return fetch('http://' + location.host + '/api/feeds/' + fetchAll, {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ feed: feed })
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        console.log(json.feed);
+        return json.feed;
+      });
+    }
+  }]);
+
+  return FeedActions;
+})(_flummox.Actions);
+
+exports['default'] = FeedActions;
+module.exports = exports['default'];
+
+},{"flummox":4,"isomorphic-fetch":15}],232:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _flummox = require('flummox');
+
+require('isomorphic-fetch');
+
 var ParticipantActions = (function (_Actions) {
   function ParticipantActions() {
     _classCallCheck(this, ParticipantActions);
@@ -27153,7 +27235,7 @@ var ParticipantActions = (function (_Actions) {
 exports['default'] = ParticipantActions;
 module.exports = exports['default'];
 
-},{"flummox":4,"isomorphic-fetch":15}],232:[function(require,module,exports){
+},{"flummox":4,"isomorphic-fetch":15}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27201,7 +27283,7 @@ router.run(function (Handler, state) {
 
 exports.router = router;
 
-},{"../Flux":228,"../routes":243,"flummox/component":2,"react":227,"react-router":40}],233:[function(require,module,exports){
+},{"../Flux":228,"../routes":244,"flummox/component":2,"react":227,"react-router":40}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27275,7 +27357,7 @@ var AppHandler = (function (_React$Component) {
 exports['default'] = AppHandler;
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],234:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27346,7 +27428,7 @@ exports['default'] = function (Component) {
 
 module.exports = exports['default'];
 
-},{"isomorphic-fetch":15,"react":227}],235:[function(require,module,exports){
+},{"isomorphic-fetch":15,"react":227}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27527,7 +27609,7 @@ exports["default"] = EventCreator;
 EventCreator.defaultProps = { title: "", date: "", max: "", place: "", description: "", document: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],236:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],237:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27647,7 +27729,7 @@ var EventDetail = (function (_React$Component) {
 exports["default"] = EventDetail;
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],237:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27714,7 +27796,7 @@ var EventHandler = (function (_React$Component) {
         ),
         _react2['default'].createElement(
           _flummoxComponent2['default'],
-          { connectToStores: ['event'] },
+          { connectToStores: ['feed'] },
           _react2['default'].createElement(_FeedJsx2['default'], { event_id: event_id })
         )
       );
@@ -27727,7 +27809,7 @@ var EventHandler = (function (_React$Component) {
 exports['default'] = EventHandler;
 module.exports = exports['default'];
 
-},{"./EventDetail.jsx":236,"./Feed.jsx":239,"./ParticipantList.jsx":242,"flummox/component":2,"react":227}],238:[function(require,module,exports){
+},{"./EventDetail.jsx":237,"./Feed.jsx":240,"./ParticipantList.jsx":243,"flummox/component":2,"react":227}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27845,28 +27927,28 @@ var EventItem = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],239:[function(require,module,exports){
-"use strict";
+},{"flummox/component":2,"react":227,"react-router":40}],240:[function(require,module,exports){
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _flummoxComponent = require("flummox/component");
+var _flummoxComponent = require('flummox/component');
 
 var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
 
@@ -27874,47 +27956,117 @@ var Feed = (function (_React$Component) {
   function Feed(props) {
     _classCallCheck(this, Feed);
 
-    _get(Object.getPrototypeOf(Feed.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(Feed.prototype), 'constructor', this).call(this, props);
+    this.props.flux.getActions('feed').fetchAll(this.props.event_id);
+    this.state = {
+      comment: props.comment
+    };
   }
 
   _inherits(Feed, _React$Component);
 
   _createClass(Feed, [{
-    key: "render",
+    key: 'render',
     value: function render() {
-      return _react2["default"].createElement(
-        "div",
-        { className: "feed panel panel-default col-md-7" },
-        _react2["default"].createElement(
-          "div",
-          { className: "panel-heading" },
-          "フィード"
+      var feeds = this.props.feeds;
+
+      var items = [];
+      feeds.forEach(function (feed) {
+        items.push(_react2['default'].createElement(FeedItem, { feedItem: feed }));
+      });
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'feed panel panel-default col-md-7' },
+        _react2['default'].createElement(
+          'div',
+          { className: 'panel-heading' },
+          'フィード'
         ),
-        _react2["default"].createElement(
-          "div",
-          { className: "panel-body" },
-          _react2["default"].createElement("input", { className: "comment", type: "text", placeholder: "コメント" }),
-          _react2["default"].createElement(
-            "div",
-            { className: "btn_area" },
-            _react2["default"].createElement(
-              "button",
-              { className: "btn btn-default" },
-              "投稿する"
+        _react2['default'].createElement(
+          'div',
+          { className: 'panel-body' },
+          _react2['default'].createElement('input', { className: 'comment', type: 'text', value: this.state.comment, placeholder: 'コメント', onChange: this.handelChangeComment.bind(this) }),
+          _react2['default'].createElement(
+            'div',
+            { className: 'btn_area' },
+            _react2['default'].createElement(
+              'button',
+              { className: 'btn btn-default', onClick: this.handleSubmit.bind(this) },
+              '投稿する'
             )
           )
+        ),
+        _react2['default'].createElement(
+          'ul',
+          { className: 'list-group' },
+          items
         )
       );
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      this.props.flux.getActions('feed').createFeed(this.state.comment, this.props.event_id);
+      this.setState({ comment: '' });
+    }
+  }, {
+    key: 'handelChangeComment',
+    value: function handelChangeComment(e) {
+      this.setState({ comment: e.target.value });
     }
   }]);
 
   return Feed;
-})(_react2["default"].Component);
+})(_react2['default'].Component);
 
-exports["default"] = Feed;
-module.exports = exports["default"];
+exports['default'] = Feed;
 
-},{"flummox/component":2,"react":227}],240:[function(require,module,exports){
+Feed.defaultProps = { comment: '' };
+
+var FeedItem = (function (_React$Component2) {
+  function FeedItem(props) {
+    _classCallCheck(this, FeedItem);
+
+    _get(Object.getPrototypeOf(FeedItem.prototype), 'constructor', this).call(this, props);
+  }
+
+  _inherits(FeedItem, _React$Component2);
+
+  _createClass(FeedItem, [{
+    key: 'render',
+    value: function render() {
+      var date = this.props.feedItem.inserted_at.replace('T', ' ').replace('Z', '');
+
+      return _react2['default'].createElement(
+        'li',
+        { className: 'list-group-item feedItem' },
+        _react2['default'].createElement(
+          'div',
+          null,
+          _react2['default'].createElement(
+            'span',
+            { className: 'user' },
+            this.props.feedItem.user.name
+          ),
+          '　',
+          _react2['default'].createElement(
+            'span',
+            { className: 'date' },
+            date
+          )
+        ),
+        this.props.feedItem.content
+      );
+    }
+  }]);
+
+  return FeedItem;
+})(_react2['default'].Component);
+
+module.exports = exports['default'];
+
+},{"flummox/component":2,"react":227}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27983,7 +28135,7 @@ var HomeHandler = (function (_React$Component) {
 exports['default'] = HomeHandler;
 module.exports = exports['default'];
 
-},{"./EventCreator.jsx":235,"./EventList.jsx":238,"flummox/component":2,"react":227}],241:[function(require,module,exports){
+},{"./EventCreator.jsx":236,"./EventList.jsx":239,"flummox/component":2,"react":227}],242:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28070,7 +28222,7 @@ exports["default"] = LoginHandler;
 LoginHandler.defaultProps = { loginId: "", pass: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],242:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28226,7 +28378,7 @@ var Participant = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],243:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28271,7 +28423,7 @@ exports['default'] = _react2['default'].createElement(
 );
 module.exports = exports['default'];
 
-},{"./components/AppHandler.jsx":233,"./components/AuthCheck.jsx":234,"./components/EventHandler.jsx":237,"./components/HomeHandler.jsx":240,"./components/LoginHandler.jsx":241,"react":227,"react-router":40}],244:[function(require,module,exports){
+},{"./components/AppHandler.jsx":234,"./components/AuthCheck.jsx":235,"./components/EventHandler.jsx":238,"./components/HomeHandler.jsx":241,"./components/LoginHandler.jsx":242,"react":227,"react-router":40}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28323,7 +28475,7 @@ var AuthStore = (function (_Store) {
 exports['default'] = AuthStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],245:[function(require,module,exports){
+},{"flummox":4}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28398,7 +28550,62 @@ var EventStore = (function (_Store) {
 exports['default'] = EventStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],246:[function(require,module,exports){
+},{"flummox":4}],247:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _flummox = require('flummox');
+
+var FeedStore = (function (_Store) {
+  function FeedStore(flux) {
+    _classCallCheck(this, FeedStore);
+
+    _get(Object.getPrototypeOf(FeedStore.prototype), 'constructor', this).call(this);
+
+    var feedActions = flux.getActionIds('feed');
+    this.register(feedActions.fetchAll, this.handleFetchAll);
+    this.register(feedActions.createFeed, this.handleCreateFeed);
+
+    this.state = {
+      feeds: []
+    };
+  }
+
+  _inherits(FeedStore, _Store);
+
+  _createClass(FeedStore, [{
+    key: 'handleFetchAll',
+    value: function handleFetchAll(feeds) {
+      this.setState(feeds);
+    }
+  }, {
+    key: 'handleCreateFeed',
+    value: function handleCreateFeed(feed) {
+      this.setState(function (state) {
+        state.feeds.push(feed);
+        return { feeds: state.feeds };
+      });
+    }
+  }]);
+
+  return FeedStore;
+})(_flummox.Store);
+
+exports['default'] = FeedStore;
+module.exports = exports['default'];
+
+},{"flummox":4}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28460,4 +28667,4 @@ var ParticipantStore = (function (_Store) {
 exports['default'] = ParticipantStore;
 module.exports = exports['default'];
 
-},{"flummox":4}]},{},[232]);
+},{"flummox":4}]},{},[233]);

@@ -5,6 +5,8 @@ import AuthActions from './actions/AuthActions';
 import AuthStore from './stores/AuthStore';
 import ParticipantActions from './actions/ParticipantActions';
 import ParticipantStore from './stores/ParticipantStore';
+import FeedActions from './actions/FeedActions';
+import FeedStore from './stores/FeedStore';
 
 export default class Flux extends Flummox {
   constructor() {
@@ -15,5 +17,7 @@ export default class Flux extends Flummox {
     this.createStore('auth', AuthStore, this);
     this.createActions('participant', ParticipantActions);
     this.createStore('participant', ParticipantStore, this);
+    this.createActions('feed', FeedActions);
+    this.createStore('feed', FeedStore, this);
   }
 }

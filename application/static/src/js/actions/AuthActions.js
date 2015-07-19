@@ -44,7 +44,6 @@ export default class AuthActions extends Actions {
       return response.json();
 
     }).then((json) => {
-      console.log(json.user);
       return json.user;
     });
   }
