@@ -13,9 +13,6 @@ export default class AuthStore extends Store {
   }
 
   handleLogin(user) {
-    console.log("store");
-    console.log(user);
     this.setState({user: user});
   }
-
 }

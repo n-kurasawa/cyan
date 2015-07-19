@@ -10,12 +10,15 @@ defmodule Api.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
   end
 
   scope "/api", Api do
     pipe_through :api
     resources "/events", EventController
     post "/login", AuthController, :login
+    get "/login/check", AuthController, :check
   end
 
   # scope "/api", Api do

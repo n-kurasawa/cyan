@@ -1,5 +1,6 @@
 import { Actions } from 'flummox';
 import 'isomorphic-fetch';
+import {router} from '../components/App.jsx'
 
 export default class AuthActions extends Actions {
 
@@ -9,6 +10,7 @@ export default class AuthActions extends Actions {
 
   login(auth) {
     return fetch('http://'+ location.host + '/api/login', {
+      credentials: 'same-origin',
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -23,6 +25,9 @@ export default class AuthActions extends Actions {
       return response.json();
 
     }).then((json) => {
+      if (json.user) {
+        router.transitionTo('home');
+      }
       return json.user;
     });
   }

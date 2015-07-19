@@ -26878,7 +26878,7 @@ var Flux = (function (_Flummox) {
 exports['default'] = Flux;
 module.exports = exports['default'];
 
-},{"./actions/AuthActions":229,"./actions/EventActions":230,"./stores/AuthStore":238,"./stores/EventStore":239,"flummox":4}],229:[function(require,module,exports){
+},{"./actions/AuthActions":229,"./actions/EventActions":230,"./stores/AuthStore":242,"./stores/EventStore":243,"flummox":4}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26897,6 +26897,8 @@ var _flummox = require('flummox');
 
 require('isomorphic-fetch');
 
+var _componentsAppJsx = require('../components/App.jsx');
+
 var AuthActions = (function (_Actions) {
   function AuthActions() {
     _classCallCheck(this, AuthActions);
@@ -26910,6 +26912,7 @@ var AuthActions = (function (_Actions) {
     key: 'login',
     value: function login(auth) {
       return fetch('http://' + location.host + '/api/login', {
+        credentials: 'same-origin',
         method: 'post',
         headers: {
           'Accept': 'application/json',
@@ -26923,6 +26926,9 @@ var AuthActions = (function (_Actions) {
         }
         return response.json();
       }).then(function (json) {
+        if (json.user) {
+          _componentsAppJsx.router.transitionTo('home');
+        }
         return json.user;
       });
     }
@@ -26934,7 +26940,7 @@ var AuthActions = (function (_Actions) {
 exports['default'] = AuthActions;
 module.exports = exports['default'];
 
-},{"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
+},{"../components/App.jsx":231,"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26966,7 +26972,8 @@ var EventActions = (function (_Actions) {
     key: 'fetchAll',
     value: function fetchAll() {
       return fetch('http://' + location.host + '/api/events', {
-        method: 'get'
+        method: 'get',
+        credentials: 'same-origin'
       }).then(function (response) {
         if (response.status >= 400) {
           throw new Error('Bad response from server');
@@ -26981,6 +26988,7 @@ var EventActions = (function (_Actions) {
     value: function createEvent(event) {
       return fetch('http://' + location.host + '/api/events', {
         method: 'post',
+        credentials: 'same-origin',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -27006,6 +27014,10 @@ module.exports = exports['default'];
 
 },{"flummox":4,"isomorphic-fetch":15}],231:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -27046,7 +27058,9 @@ router.run(function (Handler, state) {
   ), document.getElementById('app'));
 });
 
-},{"../Flux":228,"../routes":237,"flummox/component":2,"react":227,"react-router":40}],232:[function(require,module,exports){
+exports.router = router;
+
+},{"../Flux":228,"../routes":241,"flummox/component":2,"react":227,"react-router":40}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27121,6 +27135,77 @@ exports['default'] = AppHandler;
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],233:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+require('isomorphic-fetch');
+
+exports['default'] = function (Component) {
+  return (function (_React$Component) {
+    function Authenticated() {
+      _classCallCheck(this, Authenticated);
+
+      if (_React$Component != null) {
+        _React$Component.apply(this, arguments);
+      }
+    }
+
+    _inherits(Authenticated, _React$Component);
+
+    _createClass(Authenticated, [{
+      key: 'render',
+      value: function render() {
+        return _react2['default'].createElement(Component, this.props);
+      }
+    }], [{
+      key: 'willTransitionTo',
+      value: function willTransitionTo(transition, params, query, callback) {
+        Authenticated.check(transition, callback);
+      }
+    }, {
+      key: 'check',
+      value: function check(transition, callback) {
+        return fetch('http://' + location.host + '/api/login/check', {
+          method: 'get',
+          credentials: 'same-origin'
+        }).then(function (response) {
+          if (response.status >= 400) {
+            throw new Error('Bad response from server');
+          }
+          return response.json();
+        }).then(function (json) {
+          if (json.isLogin) {
+            callback();
+          } else {
+            transition.redirect('/login', {}, { 'nextPath': transition.path });
+            callback();
+          }
+        });
+      }
+    }]);
+
+    return Authenticated;
+  })(_react2['default'].Component);
+};
+
+module.exports = exports['default'];
+
+},{"isomorphic-fetch":15,"react":227}],234:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27224,7 +27309,92 @@ exports["default"] = EventCreator;
 EventCreator.defaultProps = { title: "", date: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],234:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],235:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flummoxComponent = require("flummox/component");
+
+var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var EventDetail = (function (_React$Component) {
+  function EventDetail(props) {
+    _classCallCheck(this, EventDetail);
+
+    _get(Object.getPrototypeOf(EventDetail.prototype), "constructor", this).call(this, props);
+    console.log(this.props.event_id);
+  }
+
+  _inherits(EventDetail, _React$Component);
+
+  _createClass(EventDetail, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "eventDetail panel panel-default" },
+        _react2["default"].createElement(
+          "div",
+          { className: "item-head panel-heading" },
+          _react2["default"].createElement(
+            "div",
+            { className: "userName" },
+            "開催者: "
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "date" },
+            "日付: "
+          )
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement("div", { className: "title" }),
+          _react2["default"].createElement(
+            "div",
+            { className: "description" },
+            "詳細"
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "document" },
+            "資料"
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "others" },
+            "その他"
+          )
+        )
+      );
+    }
+  }]);
+
+  return EventDetail;
+})(_react2["default"].Component);
+
+exports["default"] = EventDetail;
+module.exports = exports["default"];
+
+},{"flummox/component":2,"react":227}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27249,6 +27419,78 @@ var _flummoxComponent = require('flummox/component');
 
 var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
 
+var _EventDetailJsx = require('./EventDetail.jsx');
+
+var _EventDetailJsx2 = _interopRequireDefault(_EventDetailJsx);
+
+var _ParticipantListJsx = require('./ParticipantList.jsx');
+
+var _ParticipantListJsx2 = _interopRequireDefault(_ParticipantListJsx);
+
+var EventHandler = (function (_React$Component) {
+  function EventHandler(props) {
+    _classCallCheck(this, EventHandler);
+
+    _get(Object.getPrototypeOf(EventHandler.prototype), 'constructor', this).call(this, props);
+    this.event_id = this.props.params.id;
+  }
+
+  _inherits(EventHandler, _React$Component);
+
+  _createClass(EventHandler, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        null,
+        _react2['default'].createElement(
+          _flummoxComponent2['default'],
+          { connectToStores: ['event'] },
+          _react2['default'].createElement(_EventDetailJsx2['default'], { event_id: this.event_id })
+        ),
+        _react2['default'].createElement('div', { className: 'col-md-1' }),
+        _react2['default'].createElement(
+          _flummoxComponent2['default'],
+          { connectToStores: ['event'] },
+          _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: this.event_id })
+        )
+      );
+    }
+  }]);
+
+  return EventHandler;
+})(_react2['default'].Component);
+
+exports['default'] = EventHandler;
+module.exports = exports['default'];
+
+},{"./EventDetail.jsx":235,"./ParticipantList.jsx":240,"flummox/component":2,"react":227}],237:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flummoxComponent = require('flummox/component');
+
+var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var _reactRouter = require('react-router');
+
 var EventList = (function (_React$Component) {
   function EventList(props) {
     _classCallCheck(this, EventList);
@@ -27271,7 +27513,7 @@ var EventList = (function (_React$Component) {
 
       return _react2['default'].createElement(
         'div',
-        { className: 'eventList panel panel-default col-md-8' },
+        { className: 'eventList panel panel-default col-md-7' },
         _react2['default'].createElement(
           'div',
           { className: 'panel-heading' },
@@ -27313,7 +27555,7 @@ var EventItem = (function (_React$Component2) {
             'div',
             { className: 'userName' },
             '開催者: ',
-            this.props.event.userName
+            this.props.event.user.name
           ),
           _react2['default'].createElement(
             'div',
@@ -27326,8 +27568,8 @@ var EventItem = (function (_React$Component2) {
           'div',
           { className: 'title' },
           _react2['default'].createElement(
-            'a',
-            { href: 'event/detail' },
+            _reactRouter.Link,
+            { to: '/events/' + this.props.event.id },
             this.props.event.title
           )
         )
@@ -27340,7 +27582,7 @@ var EventItem = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227}],235:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27393,6 +27635,7 @@ var HomeHandler = (function (_React$Component) {
           { connectToStores: ['event'] },
           _react2['default'].createElement(_EventListJsx2['default'], null)
         ),
+        _react2['default'].createElement('div', { className: 'col-md-1' }),
         _react2['default'].createElement(
           _flummoxComponent2['default'],
           null,
@@ -27408,7 +27651,7 @@ var HomeHandler = (function (_React$Component) {
 exports['default'] = HomeHandler;
 module.exports = exports['default'];
 
-},{"./EventCreator.jsx":233,"./EventList.jsx":234,"flummox/component":2,"react":227}],236:[function(require,module,exports){
+},{"./EventCreator.jsx":234,"./EventList.jsx":237,"flummox/component":2,"react":227}],239:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27495,7 +27738,100 @@ exports["default"] = LoginHandler;
 LoginHandler.defaultProps = { loginId: "", pass: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],237:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],240:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flummoxComponent = require('flummox/component');
+
+var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var _reactRouter = require('react-router');
+
+var ParticipantList = (function (_React$Component) {
+  function ParticipantList(props) {
+    _classCallCheck(this, ParticipantList);
+
+    _get(Object.getPrototypeOf(ParticipantList.prototype), 'constructor', this).call(this, props);
+  }
+
+  _inherits(ParticipantList, _React$Component);
+
+  _createClass(ParticipantList, [{
+    key: 'render',
+    value: function render() {
+      var participans = ['', '', ''];
+
+      var items = [];
+      participans.forEach(function (participant) {
+        items.push(_react2['default'].createElement(Participant, { participant: participant }));
+      });
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'participantList panel panel-default col-md-4' },
+        _react2['default'].createElement(
+          'div',
+          { className: 'panel-heading' },
+          'イベント参加者'
+        ),
+        _react2['default'].createElement(
+          'ul',
+          { className: 'list-group panel-body' },
+          items
+        )
+      );
+    }
+  }]);
+
+  return ParticipantList;
+})(_react2['default'].Component);
+
+exports['default'] = ParticipantList;
+
+var Participant = (function (_React$Component2) {
+  function Participant() {
+    _classCallCheck(this, Participant);
+
+    _get(Object.getPrototypeOf(Participant.prototype), 'constructor', this).call(this);
+  }
+
+  _inherits(Participant, _React$Component2);
+
+  _createClass(Participant, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { calssName: 'list-group-item participant' },
+        '参加者'
+      );
+    }
+  }]);
+
+  return Participant;
+})(_react2['default'].Component);
+
+module.exports = exports['default'];
+
+},{"flummox/component":2,"react":227,"react-router":40}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27522,16 +27858,25 @@ var _componentsLoginHandlerJsx = require('./components/LoginHandler.jsx');
 
 var _componentsLoginHandlerJsx2 = _interopRequireDefault(_componentsLoginHandlerJsx);
 
+var _componentsEventHandlerJsx = require('./components/EventHandler.jsx');
+
+var _componentsEventHandlerJsx2 = _interopRequireDefault(_componentsEventHandlerJsx);
+
+var _componentsAuthCheckJsx = require('./components/AuthCheck.jsx');
+
+var _componentsAuthCheckJsx2 = _interopRequireDefault(_componentsAuthCheckJsx);
+
 exports['default'] = _react2['default'].createElement(
   _reactRouter.Route,
   { name: 'app', path: '/', handler: _componentsAppHandlerJsx2['default'] },
-  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: '/', handler: _componentsHomeHandlerJsx2['default'] }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'login', path: '/login', handler: _componentsLoginHandlerJsx2['default'] }),
-  _react2['default'].createElement(_reactRouter.Redirect, { from: '*', to: 'home' })
+  _react2['default'].createElement(_reactRouter.Route, { name: 'events', path: '/events', handler: (0, _componentsAuthCheckJsx2['default'])(_componentsHomeHandlerJsx2['default']) }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'event', path: '/events/:id', handler: (0, _componentsAuthCheckJsx2['default'])(_componentsEventHandlerJsx2['default']) }),
+  _react2['default'].createElement(_reactRouter.Redirect, { from: '*', to: 'events' })
 );
 module.exports = exports['default'];
 
-},{"./components/AppHandler.jsx":232,"./components/HomeHandler.jsx":235,"./components/LoginHandler.jsx":236,"react":227,"react-router":40}],238:[function(require,module,exports){
+},{"./components/AppHandler.jsx":232,"./components/AuthCheck.jsx":233,"./components/EventHandler.jsx":236,"./components/HomeHandler.jsx":238,"./components/LoginHandler.jsx":239,"react":227,"react-router":40}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27567,8 +27912,6 @@ var AuthStore = (function (_Store) {
   _createClass(AuthStore, [{
     key: 'handleLogin',
     value: function handleLogin(user) {
-      console.log('store');
-      console.log(user);
       this.setState({ user: user });
     }
   }]);
@@ -27579,7 +27922,7 @@ var AuthStore = (function (_Store) {
 exports['default'] = AuthStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],239:[function(require,module,exports){
+},{"flummox":4}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

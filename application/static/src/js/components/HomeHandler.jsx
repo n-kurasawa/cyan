@@ -14,6 +14,7 @@ export default class HomeHandler extends React.Component {
         <FluxComponent connectToStores={['event']}>
           <EventList />
         </FluxComponent>
+        <div className="col-md-1"></div>
         <FluxComponent>
           <EventCreator />
         </FluxComponent>

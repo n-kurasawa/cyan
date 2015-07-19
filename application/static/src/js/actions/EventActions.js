@@ -10,6 +10,7 @@ export default class EventActions extends Actions {
   fetchAll() {
     return fetch('http://'+ location.host + '/api/events', {
       method: 'get',
+      credentials: 'same-origin'
     }).then((response) => {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
@@ -23,6 +24,7 @@ export default class EventActions extends Actions {
   createEvent(event) {
     return fetch('http://'+ location.host + '/api/events', {
       method: 'post',
+      credentials: 'same-origin',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

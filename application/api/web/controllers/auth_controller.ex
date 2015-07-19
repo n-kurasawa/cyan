@@ -1,6 +1,7 @@
 defmodule Api.AuthController do
   use Api.Web, :controller
   alias Api.User
+  require Logger
   plug :action
 
   def login(conn, %{"auth" => %{"loginId" => loginId, "pass" => pass}}) do
@@ -11,8 +12,14 @@ defmodule Api.AuthController do
     user = Repo.one(query)
 
     if user do
-      conn = conn |> fetch_session |> put_session(:user, user)
+      conn = put_session(conn, :user, user)
     end
     render conn, user: user
   end
+
+  def check(conn, _params) do
+    user = get_session(conn, :user)
+    render conn, isLogin: !!user
+  end
+
 end

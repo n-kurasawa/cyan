@@ -11,6 +11,7 @@
     "gulp": "^3.8.11",
     "isomorphic-fetch": "^2.1.0",
     "react": "^0.13.3",
+    "react-cookie": "^0.2.5",
     "react-router": "^0.13.3",
     "vinyl-source-stream": "^1.1.0"
   },

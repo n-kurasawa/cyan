@@ -1,11 +1,14 @@
 defmodule Api.User do
   use Api.Web, :model
+  import Ecto.Query
 
   schema "users" do
     field :login_id, :string
     field :pass, :string
     field :name, :string
     field :mail, :string
+
+    has_many :events, Apu.Event
 
     timestamps
   end

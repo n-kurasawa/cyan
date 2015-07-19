@@ -4,4 +4,8 @@ defmodule Api.AuthView do
   def render("login.json", %{user: user}) do
     %{user: user}
   end
+
+  def render("check.json", %{isLogin: isLogin}) do
+    %{isLogin: isLogin}
+  end
 end

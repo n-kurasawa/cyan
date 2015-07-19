@@ -21,3 +21,5 @@ router.run((Handler, state) => {
     document.getElementById('app')
   );
 });
+
+export { router }

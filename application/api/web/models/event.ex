@@ -1,11 +1,13 @@
 defmodule Api.Event do
   use Api.Web, :model
+  import Ecto.Query
 
   schema "events" do
     field :title, :string
-    field :user_id, :integer
     field :date, Ecto.Date
     field :max, :integer
+
+    belongs_to :user, Api.User, foreign_key: :user_id
 
     timestamps
   end
