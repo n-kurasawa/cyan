@@ -6,10 +6,12 @@ export default class ParticipantList extends React.Component {
   constructor(props) {
     super(props);
     this.props.flux.getActions('participant').fetchAll(this.props.event_id);
+    this.props.flux.getActions('auth').loginUser();
   }
 
   render() {
     var participants = this.props.participants;
+    var loginUser = this.props.user;
 
     var items = [];
     participants.forEach((participant)=> {
@@ -18,14 +20,17 @@ export default class ParticipantList extends React.Component {
       );
     });
 
-    console.log();
+    if (loginUser && this.isJoin(loginUser, participants)) {
+      var btn = (<button className="btn btn-default" onClick={this.handleCancel.bind(this)}>このイベントをキャンセルする</button>);
+    } else {
+      var btn = (<button className="btn btn-default" onClick={this.handleSubmit.bind(this)}>このイベントに参加する</button>);
+    }
 
     let event = this.findEvent(this.props.event_id);
-
     return (
       <div className="participantListarea col-md-4">
         <div className="btn_area">
-          <button className="btn btn-default" onClick={this.handleSubmit.bind(this)}>このイベントに参加する</button>
+          {btn}
         </div>
         <div className="participantList panel panel-default">
           <div className="panel-heading">
@@ -44,11 +49,21 @@ export default class ParticipantList extends React.Component {
     this.props.flux.getActions('participant').joinEvent(this.props.event_id);
   }
 
+  handleCancel() {
+    this.props.flux.getActions('participant').cancelEvent(this.props.event_id);
+  }
+
   findEvent(id) {
     let events = this.props.events.filter((event)=>{
       return event.id === +id;
     });
     return events[0];
+  }
+
+  isJoin(loginUser, participants) {
+    return participants.some((participant)=>{
+      return participant.id === loginUser.id;
+    });
   }
 }
 

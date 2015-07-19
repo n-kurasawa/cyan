@@ -19,7 +19,9 @@ defmodule Api.Router do
     resources "/events", EventController
     get "/event/participants/:event_id", EventController, :participants
     post "/event/join", EventController, :join
+    post "/event/cancel", EventController, :cancel
     post "/login", AuthController, :login
+    get "/login/user", AuthController, :loginUser
     get "/login/check", AuthController, :check
   end
 

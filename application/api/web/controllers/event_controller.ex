@@ -56,4 +56,15 @@ defmodule Api.EventController do
       render conn, user: %User{}
     end
   end
+
+  def cancel(conn, %{"event_id" => event_id}) do
+    user = get_session(conn, :user)
+
+    query = from eu in EventUser,
+               where: eu.event_id == ^event_id,
+               where: eu.user_id == ^user.id
+    Repo.delete_all(query)
+
+    render conn, user: user
+  end
 end

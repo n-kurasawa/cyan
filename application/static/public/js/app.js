@@ -26942,6 +26942,23 @@ var AuthActions = (function (_Actions) {
         return json.user;
       });
     }
+  }, {
+    key: 'loginUser',
+    value: function loginUser() {
+      return fetch('http://' + location.host + '/api/login/user', {
+        credentials: 'same-origin',
+        method: 'get'
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        console.log(json.user);
+        return json.user;
+      });
+    }
   }]);
 
   return AuthActions;
@@ -27090,6 +27107,27 @@ var ParticipantActions = (function (_Actions) {
     key: 'joinEvent',
     value: function joinEvent(event_id) {
       return fetch('http://' + location.host + '/api/event/join', {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ event_id: event_id })
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        return json.user;
+      });
+    }
+  }, {
+    key: 'cancelEvent',
+    value: function cancelEvent(event_id) {
+      return fetch('http://' + location.host + '/api/event/cancel', {
         method: 'post',
         credentials: 'same-origin',
         headers: {
@@ -27671,7 +27709,7 @@ var EventHandler = (function (_React$Component) {
         _react2['default'].createElement('div', { className: 'col-md-1' }),
         _react2['default'].createElement(
           _flummoxComponent2['default'],
-          { connectToStores: ['event', 'participant'] },
+          { connectToStores: ['event', 'participant', 'auth'] },
           _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: event_id })
         ),
         _react2['default'].createElement(
@@ -28065,6 +28103,7 @@ var ParticipantList = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(ParticipantList.prototype), 'constructor', this).call(this, props);
     this.props.flux.getActions('participant').fetchAll(this.props.event_id);
+    this.props.flux.getActions('auth').loginUser();
   }
 
   _inherits(ParticipantList, _React$Component);
@@ -28073,27 +28112,35 @@ var ParticipantList = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var participants = this.props.participants;
+      var loginUser = this.props.user;
 
       var items = [];
       participants.forEach(function (participant) {
         items.push(_react2['default'].createElement(Participant, { participant: participant }));
       });
 
-      console.log();
+      if (loginUser && this.isJoin(loginUser, participants)) {
+        var btn = _react2['default'].createElement(
+          'button',
+          { className: 'btn btn-default', onClick: this.handleCancel.bind(this) },
+          'このイベントをキャンセルする'
+        );
+      } else {
+        var btn = _react2['default'].createElement(
+          'button',
+          { className: 'btn btn-default', onClick: this.handleSubmit.bind(this) },
+          'このイベントに参加する'
+        );
+      }
 
       var event = this.findEvent(this.props.event_id);
-
       return _react2['default'].createElement(
         'div',
         { className: 'participantListarea col-md-4' },
         _react2['default'].createElement(
           'div',
           { className: 'btn_area' },
-          _react2['default'].createElement(
-            'button',
-            { className: 'btn btn-default', onClick: this.handleSubmit.bind(this) },
-            'このイベントに参加する'
-          )
+          btn
         ),
         _react2['default'].createElement(
           'div',
@@ -28128,12 +28175,24 @@ var ParticipantList = (function (_React$Component) {
       this.props.flux.getActions('participant').joinEvent(this.props.event_id);
     }
   }, {
+    key: 'handleCancel',
+    value: function handleCancel() {
+      this.props.flux.getActions('participant').cancelEvent(this.props.event_id);
+    }
+  }, {
     key: 'findEvent',
     value: function findEvent(id) {
       var events = this.props.events.filter(function (event) {
         return event.id === +id;
       });
       return events[0];
+    }
+  }, {
+    key: 'isJoin',
+    value: function isJoin(loginUser, participants) {
+      return participants.some(function (participant) {
+        return participant.id === loginUser.id;
+      });
     }
   }]);
 
@@ -28237,6 +28296,7 @@ var AuthStore = (function (_Store) {
 
     var authActions = flux.getActionIds('auth');
     this.register(authActions.login, this.handleLogin);
+    this.register(authActions.loginUser, this.handleLoginUser);
 
     this.state = {
       user: null
@@ -28248,6 +28308,11 @@ var AuthStore = (function (_Store) {
   _createClass(AuthStore, [{
     key: 'handleLogin',
     value: function handleLogin(user) {
+      this.setState({ user: user });
+    }
+  }, {
+    key: 'handleLoginUser',
+    value: function handleLoginUser(user) {
       this.setState({ user: user });
     }
   }]);
@@ -28359,6 +28424,7 @@ var ParticipantStore = (function (_Store) {
     var participantActions = flux.getActionIds('participant');
     this.register(participantActions.fetchAll, this.handleFetchAll);
     this.register(participantActions.joinEvent, this.handleJoinEvent);
+    this.register(participantActions.cancelEvent, this.handleCancelEvent);
 
     this.state = {
       participants: []
@@ -28377,6 +28443,14 @@ var ParticipantStore = (function (_Store) {
     value: function handleJoinEvent(user) {
       this.state.participants.push(user);
       this.setState({ participants: this.state.participants });
+    }
+  }, {
+    key: 'handleCancelEvent',
+    value: function handleCancelEvent(user) {
+      var participants = this.state.participants.filter(function (participant) {
+        return participant.id !== user.id;
+      });
+      this.setState({ participants: participants });
     }
   }]);
 

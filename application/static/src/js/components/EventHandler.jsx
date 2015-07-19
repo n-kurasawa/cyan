@@ -18,7 +18,7 @@ export default class EventHandler extends React.Component {
           <EventDetail event_id={event_id}/>
         </FluxComponent>
         <div className="col-md-1"></div>
-        <FluxComponent connectToStores={['event', 'participant']}>
+        <FluxComponent connectToStores={['event', 'participant', 'auth']}>
           <ParticipantList event_id={event_id} />
         </FluxComponent>
         <FluxComponent connectToStores={['event']}>

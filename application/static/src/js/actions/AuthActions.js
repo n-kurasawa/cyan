@@ -31,4 +31,21 @@ export default class AuthActions extends Actions {
       return json.user;
     });
   }
+
+  loginUser() {
+    return fetch('http://'+ location.host + '/api/login/user', {
+      credentials: 'same-origin',
+      method: 'get',
+    }).then((response) => {
+
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+
+    }).then((json) => {
+      console.log(json.user);
+      return json.user;
+    });
+  }
 }

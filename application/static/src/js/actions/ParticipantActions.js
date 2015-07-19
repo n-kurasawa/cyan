@@ -42,4 +42,25 @@ export default class ParticipantActions extends Actions {
     });
   }
 
+  cancelEvent(event_id) {
+    return fetch('http://'+ location.host + '/api/event/cancel', {
+      method: 'post',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( {event_id: event_id} )
+    }).then((response) => {
+
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+
+    }).then((json) => {
+      return json.user;
+    });
+  }
+
 }

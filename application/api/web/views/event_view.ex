@@ -16,4 +16,8 @@ defmodule Api.EventView do
   def render("join.json", %{user: user}) do
     %{user: user}
   end
+
+  def render("cancel.json", %{user: user}) do
+    %{user: user}
+  end
 end
