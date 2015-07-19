@@ -10,6 +10,7 @@ export default class EventList extends React.Component {
 
   render() {
     var events = this.props.events;
+    console.log(events);
 
     var items = [];
     events.forEach((event)=> {

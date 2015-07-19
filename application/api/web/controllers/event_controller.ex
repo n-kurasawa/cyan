@@ -23,7 +23,8 @@ defmodule Api.EventController do
       conn
       |> put_flash(:info, "User created successfully.")
 
-      render conn, event: event_params
+      event
+      render conn, event: Map.put(event, "user", user)
     else
       render conn, event: %Event{}
     end

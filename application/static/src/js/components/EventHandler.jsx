@@ -6,18 +6,19 @@ import ParticipantList from './ParticipantList.jsx';
 export default class EventHandler extends React.Component {
   constructor(props) {
     super(props);
-    this.event_id = this.props.params.id;
   }
 
   render() {
+    let event_id = this.props.params.id;
+
     return (
       <div>
         <FluxComponent connectToStores={['event']}>
-          <EventDetail event_id={this.event_id}/>
+          <EventDetail event_id={event_id}/>
         </FluxComponent>
         <div className="col-md-1"></div>
         <FluxComponent connectToStores={['event']}>
-          <ParticipantList event_id={this.event_id} />
+          <ParticipantList event_id={event_id} />
         </FluxComponent>
       </div>
     );

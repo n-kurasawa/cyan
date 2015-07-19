@@ -26927,7 +26927,7 @@ var AuthActions = (function (_Actions) {
         return response.json();
       }).then(function (json) {
         if (json.user) {
-          _componentsAppJsx.router.transitionTo('home');
+          _componentsAppJsx.router.transitionTo('events');
         }
         return json.user;
       });
@@ -27339,7 +27339,6 @@ var EventDetail = (function (_React$Component) {
     _classCallCheck(this, EventDetail);
 
     _get(Object.getPrototypeOf(EventDetail.prototype), "constructor", this).call(this, props);
-    console.log(this.props.event_id);
   }
 
   _inherits(EventDetail, _React$Component);
@@ -27347,27 +27346,40 @@ var EventDetail = (function (_React$Component) {
   _createClass(EventDetail, [{
     key: "render",
     value: function render() {
+      var event = this.findEvent(this.props.event_id);
+
       return _react2["default"].createElement(
         "div",
-        { className: "eventDetail panel panel-default" },
+        { className: "eventDetail panel panel-default col-md-7" },
         _react2["default"].createElement(
           "div",
-          { className: "item-head panel-heading" },
+          { className: "panel-heading" },
           _react2["default"].createElement(
             "div",
-            { className: "userName" },
-            "開催者: "
+            { className: "item-head" },
+            _react2["default"].createElement(
+              "div",
+              { className: "userName" },
+              "開催者: ",
+              event.user.name
+            ),
+            _react2["default"].createElement(
+              "div",
+              { className: "date" },
+              "日付: ",
+              event.date,
+              " "
+            )
           ),
           _react2["default"].createElement(
             "div",
-            { className: "date" },
-            "日付: "
+            { className: "title" },
+            event.title
           )
         ),
         _react2["default"].createElement(
           "div",
           { className: "panel-body" },
-          _react2["default"].createElement("div", { className: "title" }),
           _react2["default"].createElement(
             "div",
             { className: "description" },
@@ -27385,6 +27397,14 @@ var EventDetail = (function (_React$Component) {
           )
         )
       );
+    }
+  }, {
+    key: "findEvent",
+    value: function findEvent(id) {
+      var events = this.props.events.filter(function (event) {
+        return event.id === +id;
+      });
+      return events[0];
     }
   }]);
 
@@ -27432,7 +27452,6 @@ var EventHandler = (function (_React$Component) {
     _classCallCheck(this, EventHandler);
 
     _get(Object.getPrototypeOf(EventHandler.prototype), 'constructor', this).call(this, props);
-    this.event_id = this.props.params.id;
   }
 
   _inherits(EventHandler, _React$Component);
@@ -27440,19 +27459,21 @@ var EventHandler = (function (_React$Component) {
   _createClass(EventHandler, [{
     key: 'render',
     value: function render() {
+      var event_id = this.props.params.id;
+
       return _react2['default'].createElement(
         'div',
         null,
         _react2['default'].createElement(
           _flummoxComponent2['default'],
           { connectToStores: ['event'] },
-          _react2['default'].createElement(_EventDetailJsx2['default'], { event_id: this.event_id })
+          _react2['default'].createElement(_EventDetailJsx2['default'], { event_id: event_id })
         ),
         _react2['default'].createElement('div', { className: 'col-md-1' }),
         _react2['default'].createElement(
           _flummoxComponent2['default'],
           { connectToStores: ['event'] },
-          _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: this.event_id })
+          _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: event_id })
         )
       );
     }
@@ -27505,6 +27526,7 @@ var EventList = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var events = this.props.events;
+      console.log(events);
 
       var items = [];
       events.forEach(function (event) {

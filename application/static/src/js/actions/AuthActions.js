@@ -26,7 +26,7 @@ export default class AuthActions extends Actions {
 
     }).then((json) => {
       if (json.user) {
-        router.transitionTo('home');
+        router.transitionTo('events');
       }
       return json.user;
     });

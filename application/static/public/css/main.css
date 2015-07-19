@@ -61,3 +61,32 @@ body {
 .eventCreator {
   padding: 0;
 }
+.participantList {
+  padding: 0;
+}
+.eventDetail {
+  padding: 0;
+}
+.eventDetail .item-head {
+  zoom: 1;
+}
+.eventDetail .item-head:before,
+.eventDetail .item-head:after {
+  content: "";
+  display: table;
+}
+.eventDetail .item-head:after {
+  clear: both;
+}
+.eventDetail .item-head .userName {
+  float: left;
+  margin-right: 10px;
+}
+.eventDetail .item-head .date {
+  float: left;
+}
+.eventDetail .title {
+  margin-top: 10px;
+  font-size: 32px;
+  text-align: center;
+}
