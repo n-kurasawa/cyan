@@ -10,7 +10,11 @@ defmodule Api.FeedController do
   plug :action
 
   def index(conn, %{"event_id" => event_id}) do
-    feeds = Feed |> Repo.all() |> Repo.preload [:user, :event]
+    query = from f in Feed,
+               where: f.event_id == ^event_id,
+               select: f
+
+    feeds = Repo.all(query) |> Repo.preload [:user, :event]
     render conn, feeds: feeds
   end
 
