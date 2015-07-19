@@ -79,8 +79,28 @@ body {
   margin-top: 15px;
   text-align: center;
 }
-.participantList {
+.participantListarea .btn_area {
+  margin-bottom: 20px;
+}
+.participantListarea .btn_area .btn {
+  width: 100%;
+}
+.participantListarea .participantList {
   padding: 0;
+}
+.participantListarea .participantList .panel-heading {
+  zoom: 1;
+}
+.participantListarea .participantList .panel-heading:before,
+.participantListarea .participantList .panel-heading:after {
+  content: "";
+  display: table;
+}
+.participantListarea .participantList .panel-heading:after {
+  clear: both;
+}
+.participantListarea .participantList .panel-heading .people {
+  float: right;
 }
 .eventDetail {
   padding: 0;

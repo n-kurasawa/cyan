@@ -26859,6 +26859,14 @@ var _storesAuthStore = require('./stores/AuthStore');
 
 var _storesAuthStore2 = _interopRequireDefault(_storesAuthStore);
 
+var _actionsParticipantActions = require('./actions/ParticipantActions');
+
+var _actionsParticipantActions2 = _interopRequireDefault(_actionsParticipantActions);
+
+var _storesParticipantStore = require('./stores/ParticipantStore');
+
+var _storesParticipantStore2 = _interopRequireDefault(_storesParticipantStore);
+
 var Flux = (function (_Flummox) {
   function Flux() {
     _classCallCheck(this, Flux);
@@ -26868,6 +26876,8 @@ var Flux = (function (_Flummox) {
     this.createStore('event', _storesEventStore2['default'], this);
     this.createActions('auth', _actionsAuthActions2['default']);
     this.createStore('auth', _storesAuthStore2['default'], this);
+    this.createActions('participant', _actionsParticipantActions2['default']);
+    this.createStore('participant', _storesParticipantStore2['default'], this);
   }
 
   _inherits(Flux, _Flummox);
@@ -26878,7 +26888,7 @@ var Flux = (function (_Flummox) {
 exports['default'] = Flux;
 module.exports = exports['default'];
 
-},{"./actions/AuthActions":229,"./actions/EventActions":230,"./stores/AuthStore":243,"./stores/EventStore":244,"flummox":4}],229:[function(require,module,exports){
+},{"./actions/AuthActions":229,"./actions/EventActions":230,"./actions/ParticipantActions":231,"./stores/AuthStore":244,"./stores/EventStore":245,"./stores/ParticipantStore":246,"flummox":4}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -26940,7 +26950,7 @@ var AuthActions = (function (_Actions) {
 exports['default'] = AuthActions;
 module.exports = exports['default'];
 
-},{"../components/App.jsx":231,"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
+},{"../components/App.jsx":232,"flummox":4,"isomorphic-fetch":15}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27004,6 +27014,27 @@ var EventActions = (function (_Actions) {
         return json.event;
       });
     }
+  }, {
+    key: 'joinEvent',
+    value: function joinEvent(event_id) {
+      return fetch('http://' + location.host + '/api/event/join', {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ event_id: event_id })
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        return { id: json.event.id, join_user: json.join_user };
+      });
+    }
   }]);
 
   return EventActions;
@@ -27013,6 +27044,78 @@ exports['default'] = EventActions;
 module.exports = exports['default'];
 
 },{"flummox":4,"isomorphic-fetch":15}],231:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _flummox = require('flummox');
+
+require('isomorphic-fetch');
+
+var ParticipantActions = (function (_Actions) {
+  function ParticipantActions() {
+    _classCallCheck(this, ParticipantActions);
+
+    _get(Object.getPrototypeOf(ParticipantActions.prototype), 'constructor', this).call(this);
+  }
+
+  _inherits(ParticipantActions, _Actions);
+
+  _createClass(ParticipantActions, [{
+    key: 'fetchAll',
+    value: function fetchAll(event_id) {
+      return fetch('http://' + location.host + '/api/event/participants/' + event_id, {
+        method: 'get',
+        credentials: 'same-origin'
+      }).then(function (response) {
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        return json.users;
+      });
+    }
+  }, {
+    key: 'joinEvent',
+    value: function joinEvent(event_id) {
+      return fetch('http://' + location.host + '/api/event/join', {
+        method: 'post',
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ event_id: event_id })
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        return json.user;
+      });
+    }
+  }]);
+
+  return ParticipantActions;
+})(_flummox.Actions);
+
+exports['default'] = ParticipantActions;
+module.exports = exports['default'];
+
+},{"flummox":4,"isomorphic-fetch":15}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27060,7 +27163,7 @@ router.run(function (Handler, state) {
 
 exports.router = router;
 
-},{"../Flux":228,"../routes":242,"flummox/component":2,"react":227,"react-router":40}],232:[function(require,module,exports){
+},{"../Flux":228,"../routes":243,"flummox/component":2,"react":227,"react-router":40}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27134,7 +27237,7 @@ var AppHandler = (function (_React$Component) {
 exports['default'] = AppHandler;
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],233:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27205,7 +27308,7 @@ exports['default'] = function (Component) {
 
 module.exports = exports['default'];
 
-},{"isomorphic-fetch":15,"react":227}],234:[function(require,module,exports){
+},{"isomorphic-fetch":15,"react":227}],235:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27386,7 +27489,7 @@ exports["default"] = EventCreator;
 EventCreator.defaultProps = { title: "", date: "", max: "", place: "", description: "", document: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],235:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27506,7 +27609,7 @@ var EventDetail = (function (_React$Component) {
 exports["default"] = EventDetail;
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],236:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27568,7 +27671,7 @@ var EventHandler = (function (_React$Component) {
         _react2['default'].createElement('div', { className: 'col-md-1' }),
         _react2['default'].createElement(
           _flummoxComponent2['default'],
-          { connectToStores: ['event'] },
+          { connectToStores: ['event', 'participant'] },
           _react2['default'].createElement(_ParticipantListJsx2['default'], { event_id: event_id })
         ),
         _react2['default'].createElement(
@@ -27586,7 +27689,7 @@ var EventHandler = (function (_React$Component) {
 exports['default'] = EventHandler;
 module.exports = exports['default'];
 
-},{"./EventDetail.jsx":235,"./Feed.jsx":238,"./ParticipantList.jsx":241,"flummox/component":2,"react":227}],237:[function(require,module,exports){
+},{"./EventDetail.jsx":236,"./Feed.jsx":239,"./ParticipantList.jsx":242,"flummox/component":2,"react":227}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27704,7 +27807,7 @@ var EventItem = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],238:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],239:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27773,7 +27876,7 @@ var Feed = (function (_React$Component) {
 exports["default"] = Feed;
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],239:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27842,7 +27945,7 @@ var HomeHandler = (function (_React$Component) {
 exports['default'] = HomeHandler;
 module.exports = exports['default'];
 
-},{"./EventCreator.jsx":234,"./EventList.jsx":237,"flummox/component":2,"react":227}],240:[function(require,module,exports){
+},{"./EventCreator.jsx":235,"./EventList.jsx":238,"flummox/component":2,"react":227}],241:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27929,7 +28032,7 @@ exports["default"] = LoginHandler;
 LoginHandler.defaultProps = { loginId: "", pass: "" };
 module.exports = exports["default"];
 
-},{"flummox/component":2,"react":227}],241:[function(require,module,exports){
+},{"flummox/component":2,"react":227}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27961,6 +28064,7 @@ var ParticipantList = (function (_React$Component) {
     _classCallCheck(this, ParticipantList);
 
     _get(Object.getPrototypeOf(ParticipantList.prototype), 'constructor', this).call(this, props);
+    this.props.flux.getActions('participant').fetchAll(this.props.event_id);
   }
 
   _inherits(ParticipantList, _React$Component);
@@ -27968,27 +28072,68 @@ var ParticipantList = (function (_React$Component) {
   _createClass(ParticipantList, [{
     key: 'render',
     value: function render() {
-      var participans = ['', '', ''];
+      var participants = this.props.participants;
 
       var items = [];
-      participans.forEach(function (participant) {
+      participants.forEach(function (participant) {
         items.push(_react2['default'].createElement(Participant, { participant: participant }));
       });
 
+      console.log();
+
+      var event = this.findEvent(this.props.event_id);
+
       return _react2['default'].createElement(
         'div',
-        { className: 'participantList panel panel-default col-md-4' },
+        { className: 'participantListarea col-md-4' },
         _react2['default'].createElement(
           'div',
-          { className: 'panel-heading' },
-          'イベント参加者'
+          { className: 'btn_area' },
+          _react2['default'].createElement(
+            'button',
+            { className: 'btn btn-default', onClick: this.handleSubmit.bind(this) },
+            'このイベントに参加する'
+          )
         ),
         _react2['default'].createElement(
-          'ul',
-          { className: 'list-group panel-body' },
-          items
+          'div',
+          { className: 'participantList panel panel-default' },
+          _react2['default'].createElement(
+            'div',
+            { className: 'panel-heading' },
+            _react2['default'].createElement(
+              'div',
+              { className: 'people' },
+              participants.length,
+              ' / ',
+              event.max
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: 'title' },
+              'イベント参加者'
+            )
+          ),
+          _react2['default'].createElement(
+            'ul',
+            { className: 'list-group panel-body' },
+            items
+          )
         )
       );
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      this.props.flux.getActions('participant').joinEvent(this.props.event_id);
+    }
+  }, {
+    key: 'findEvent',
+    value: function findEvent(id) {
+      var events = this.props.events.filter(function (event) {
+        return event.id === +id;
+      });
+      return events[0];
     }
   }]);
 
@@ -28010,9 +28155,9 @@ var Participant = (function (_React$Component2) {
     key: 'render',
     value: function render() {
       return _react2['default'].createElement(
-        'div',
-        { calssName: 'list-group-item participant' },
-        '参加者'
+        'li',
+        { className: 'list-group-item participant' },
+        this.props.participant.name
       );
     }
   }]);
@@ -28022,7 +28167,7 @@ var Participant = (function (_React$Component2) {
 
 module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227,"react-router":40}],242:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28067,7 +28212,7 @@ exports['default'] = _react2['default'].createElement(
 );
 module.exports = exports['default'];
 
-},{"./components/AppHandler.jsx":232,"./components/AuthCheck.jsx":233,"./components/EventHandler.jsx":236,"./components/HomeHandler.jsx":239,"./components/LoginHandler.jsx":240,"react":227,"react-router":40}],243:[function(require,module,exports){
+},{"./components/AppHandler.jsx":233,"./components/AuthCheck.jsx":234,"./components/EventHandler.jsx":237,"./components/HomeHandler.jsx":240,"./components/LoginHandler.jsx":241,"react":227,"react-router":40}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28113,7 +28258,7 @@ var AuthStore = (function (_Store) {
 exports['default'] = AuthStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],244:[function(require,module,exports){
+},{"flummox":4}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28139,6 +28284,7 @@ var EventStore = (function (_Store) {
     var eventActions = flux.getActionIds('event');
     this.register(eventActions.fetchAll, this.handleFetchAll);
     this.register(eventActions.createEvent, this.handleCreateEvent);
+    this.register(eventActions.joinEvent, this.handleJoinEvent);
 
     this.state = {
       events: []
@@ -28160,6 +28306,25 @@ var EventStore = (function (_Store) {
         return { events: state.events };
       });
     }
+  }, {
+    key: 'handleJoinEvent',
+    value: function handleJoinEvent(join) {
+      this.setState(function (state) {
+
+        state.events.forEach(function (event) {
+          console.log(event.id, join.id);
+          if (event.id === join.id) {
+            if (event.participant) {
+              event.participant.push(join.joinUser);
+            } else {
+              event.participant = [join.joinUser];
+            }
+          }
+
+          return { events: state.events };
+        });
+      });
+    }
   }]);
 
   return EventStore;
@@ -28168,4 +28333,57 @@ var EventStore = (function (_Store) {
 exports['default'] = EventStore;
 module.exports = exports['default'];
 
-},{"flummox":4}]},{},[231]);
+},{"flummox":4}],246:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _flummox = require('flummox');
+
+var ParticipantStore = (function (_Store) {
+  function ParticipantStore(flux) {
+    _classCallCheck(this, ParticipantStore);
+
+    _get(Object.getPrototypeOf(ParticipantStore.prototype), 'constructor', this).call(this);
+
+    var participantActions = flux.getActionIds('participant');
+    this.register(participantActions.fetchAll, this.handleFetchAll);
+    this.register(participantActions.joinEvent, this.handleJoinEvent);
+
+    this.state = {
+      participants: []
+    };
+  }
+
+  _inherits(ParticipantStore, _Store);
+
+  _createClass(ParticipantStore, [{
+    key: 'handleFetchAll',
+    value: function handleFetchAll(users) {
+      this.setState({ participants: users });
+    }
+  }, {
+    key: 'handleJoinEvent',
+    value: function handleJoinEvent(user) {
+      this.state.participants.push(user);
+      this.setState({ participants: this.state.participants });
+    }
+  }]);
+
+  return ParticipantStore;
+})(_flummox.Store);
+
+exports['default'] = ParticipantStore;
+module.exports = exports['default'];
+
+},{"flummox":4}]},{},[232]);

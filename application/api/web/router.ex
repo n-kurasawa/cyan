@@ -17,6 +17,8 @@ defmodule Api.Router do
   scope "/api", Api do
     pipe_through :api
     resources "/events", EventController
+    get "/event/participants/:event_id", EventController, :participants
+    post "/event/join", EventController, :join
     post "/login", AuthController, :login
     get "/login/check", AuthController, :check
   end

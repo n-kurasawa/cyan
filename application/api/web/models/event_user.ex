@@ -1,20 +1,15 @@
-defmodule Api.User do
+defmodule Api.EventUser do
   use Api.Web, :model
   import Ecto.Query
 
-  schema "users" do
-    field :login_id, :string
-    field :pass, :string
-    field :name, :string
-    field :mail, :string
-
-    has_many :events, Apu.Event
-    has_many :event_user, Apu.EventUser
+  schema "event_user" do
+    belongs_to :user, Api.User, foreign_key: :user_id
+    belongs_to :event, Api.Event, foreign_key: :event_id
 
     timestamps
   end
 
-  @required_fields ~w(login_id pass name mail)
+  @required_fields ~w(event_id user_id)
   @optional_fields ~w()
 
   @doc """

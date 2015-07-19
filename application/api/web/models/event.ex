@@ -11,6 +11,7 @@ defmodule Api.Event do
     field :place, :string
 
     belongs_to :user, Api.User, foreign_key: :user_id
+    has_many :event_user, Apu.EventUser
 
     timestamps
   end

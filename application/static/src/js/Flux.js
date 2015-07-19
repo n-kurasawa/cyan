@@ -3,6 +3,8 @@ import EventActions from './actions/EventActions';
 import EventStore from './stores/EventStore';
 import AuthActions from './actions/AuthActions';
 import AuthStore from './stores/AuthStore';
+import ParticipantActions from './actions/ParticipantActions';
+import ParticipantStore from './stores/ParticipantStore';
 
 export default class Flux extends Flummox {
   constructor() {
@@ -11,5 +13,7 @@ export default class Flux extends Flummox {
     this.createStore('event', EventStore, this);
     this.createActions('auth', AuthActions);
     this.createStore('auth', AuthStore, this);
+    this.createActions('participant', ParticipantActions);
+    this.createStore('participant', ParticipantStore, this);
   }
 }

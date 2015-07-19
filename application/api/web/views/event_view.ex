@@ -8,4 +8,12 @@ defmodule Api.EventView do
   def render("create.json", %{event: event}) do
     %{event: event}
   end
+
+  def render("participants.json", %{users: users}) do
+    %{users: users}
+  end
+
+  def render("join.json", %{user: user}) do
+    %{user: user}
+  end
 end
