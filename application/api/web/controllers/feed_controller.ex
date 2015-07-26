@@ -30,9 +30,9 @@ defmodule Api.FeedController do
       conn
       |> put_flash(:info, "User created successfully.")
 
-      render conn, feed: Map.put(new_feed, "user", user)
+      render conn, feed: new_feed, user: user
     else
-      render conn, feed: %Feed{}
+      render conn, feed: %Feed{}, user: %User{}
     end
   end
 end

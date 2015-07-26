@@ -8,6 +8,11 @@ export default class FeedActions extends Actions {
   }
 
   fetchAll(event_id) {
+    this.__clear();
+    this.__fetchAll(event_id);
+  }
+
+  __fetchAll(event_id) {
     return fetch('http://'+ location.host + '/api/feeds/' + event_id, {
       method: 'get',
       credentials: 'same-origin'
@@ -38,8 +43,11 @@ export default class FeedActions extends Actions {
       return response.json();
 
     }).then((json) => {
-      console.log(json.feed);
-      return json.feed;
+      return {feed: json.feed, user: json.user};
     });
+  }
+
+  __clear() {
+    return 'clear';
   }
 }

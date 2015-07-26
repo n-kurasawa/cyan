@@ -7,6 +7,10 @@ import Feed from './Feed.jsx';
 export default class EventHandler extends React.Component {
   constructor(props) {
     super(props);
+    this.props.flux.getActions('event').fetchAll();
+    this.props.flux.getActions('feed').fetchAll(this.props.params.id);
+    this.props.flux.getActions('participant').fetchAll(this.props.params.id);
+    this.props.flux.getActions('auth').loginUser();
   }
 
   render() {

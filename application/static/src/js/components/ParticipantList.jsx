@@ -5,8 +5,6 @@ import { Link } from 'react-router';
 export default class ParticipantList extends React.Component {
   constructor(props) {
     super(props);
-    this.props.flux.getActions('participant').fetchAll(this.props.event_id);
-    this.props.flux.getActions('auth').loginUser();
   }
 
   render() {
@@ -16,7 +14,7 @@ export default class ParticipantList extends React.Component {
     var items = [];
     participants.forEach((participant)=> {
       items.push(
-        <Participant participant={participant}/>
+        <Participant key={participant.id} participant={participant}/>
       );
     });
 
@@ -27,6 +25,7 @@ export default class ParticipantList extends React.Component {
     }
 
     let event = this.findEvent(this.props.event_id);
+    let max = event ? event.max : 0;
     return (
       <div className="participantListarea col-md-4">
         <div className="btn_area">
@@ -34,7 +33,7 @@ export default class ParticipantList extends React.Component {
         </div>
         <div className="participantList panel panel-default">
           <div className="panel-heading">
-            <div className="people">{participants.length} / {event.max}</div>
+            <div className="people">{participants.length} / {max}</div>
             <div className="title">イベント参加者</div>
           </div>
           <ul className="list-group panel-body">

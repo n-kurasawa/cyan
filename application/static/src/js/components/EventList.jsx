@@ -14,7 +14,7 @@ export default class EventList extends React.Component {
     var items = [];
     events.forEach((event)=> {
       items.push(
-        <EventItem event={event} />
+        <EventItem key={event.id} event={event} />
       );
     });
 

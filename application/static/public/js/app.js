@@ -27100,6 +27100,12 @@ var FeedActions = (function (_Actions) {
   _createClass(FeedActions, [{
     key: 'fetchAll',
     value: function fetchAll(event_id) {
+      this.__clear();
+      this.__fetchAll(event_id);
+    }
+  }, {
+    key: '__fetchAll',
+    value: function __fetchAll(event_id) {
       return fetch('http://' + location.host + '/api/feeds/' + event_id, {
         method: 'get',
         credentials: 'same-origin'
@@ -27130,9 +27136,13 @@ var FeedActions = (function (_Actions) {
         }
         return response.json();
       }).then(function (json) {
-        console.log(json.feed);
-        return json.feed;
+        return { feed: json.feed, user: json.user };
       });
+    }
+  }, {
+    key: '__clear',
+    value: function __clear() {
+      return 'clear';
     }
   }]);
 
@@ -27173,6 +27183,12 @@ var ParticipantActions = (function (_Actions) {
   _createClass(ParticipantActions, [{
     key: 'fetchAll',
     value: function fetchAll(event_id) {
+      this.__clear();
+      this.__fetchAll(event_id);
+    }
+  }, {
+    key: '__fetchAll',
+    value: function __fetchAll(event_id) {
       return fetch('http://' + location.host + '/api/event/participants/' + event_id, {
         method: 'get',
         credentials: 'same-origin'
@@ -27226,6 +27242,11 @@ var ParticipantActions = (function (_Actions) {
       }).then(function (json) {
         return json.user;
       });
+    }
+  }, {
+    key: '__clear',
+    value: function __clear() {
+      return '';
     }
   }]);
 
@@ -27647,6 +27668,13 @@ var EventDetail = (function (_React$Component) {
     key: "render",
     value: function render() {
       var event = this.findEvent(this.props.event_id);
+      if (event) {
+        var name = event.user.name;
+        var date = event.date;
+        var title = event.title;
+        var place = event.place;
+        var description = event.description;
+      }
 
       return _react2["default"].createElement(
         "div",
@@ -27661,20 +27689,20 @@ var EventDetail = (function (_React$Component) {
               "div",
               { className: "userName" },
               "主催者: ",
-              event.user.name
+              name
             ),
             _react2["default"].createElement(
               "div",
               { className: "date" },
               "開催日: ",
-              event.date,
+              date,
               " "
             )
           ),
           _react2["default"].createElement(
             "div",
             { className: "title" },
-            event.title
+            title
           )
         ),
         _react2["default"].createElement(
@@ -27688,7 +27716,7 @@ var EventDetail = (function (_React$Component) {
               { className: "item-detail-head" },
               "会場"
             ),
-            event.place
+            place
           ),
           _react2["default"].createElement(
             "div",
@@ -27698,7 +27726,7 @@ var EventDetail = (function (_React$Component) {
               { className: "item-detail-head" },
               "詳細"
             ),
-            event.description
+            description
           ),
           _react2["default"].createElement(
             "div",
@@ -27771,6 +27799,10 @@ var EventHandler = (function (_React$Component) {
     _classCallCheck(this, EventHandler);
 
     _get(Object.getPrototypeOf(EventHandler.prototype), 'constructor', this).call(this, props);
+    this.props.flux.getActions('event').fetchAll();
+    this.props.flux.getActions('feed').fetchAll(this.props.params.id);
+    this.props.flux.getActions('participant').fetchAll(this.props.params.id);
+    this.props.flux.getActions('auth').loginUser();
   }
 
   _inherits(EventHandler, _React$Component);
@@ -27853,7 +27885,7 @@ var EventList = (function (_React$Component) {
 
       var items = [];
       events.forEach(function (event) {
-        items.push(_react2['default'].createElement(EventItem, { event: event }));
+        items.push(_react2['default'].createElement(EventItem, { key: event.id, event: event }));
       });
 
       return _react2['default'].createElement(
@@ -27928,27 +27960,27 @@ var EventItem = (function (_React$Component2) {
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],240:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _flummoxComponent = require('flummox/component');
+var _flummoxComponent = require("flummox/component");
 
 var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
 
@@ -27956,8 +27988,7 @@ var Feed = (function (_React$Component) {
   function Feed(props) {
     _classCallCheck(this, Feed);
 
-    _get(Object.getPrototypeOf(Feed.prototype), 'constructor', this).call(this, props);
-    this.props.flux.getActions('feed').fetchAll(this.props.event_id);
+    _get(Object.getPrototypeOf(Feed.prototype), "constructor", this).call(this, props);
     this.state = {
       comment: props.comment
     };
@@ -27966,93 +27997,93 @@ var Feed = (function (_React$Component) {
   _inherits(Feed, _React$Component);
 
   _createClass(Feed, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var feeds = this.props.feeds;
 
       var items = [];
       feeds.forEach(function (feed) {
-        items.push(_react2['default'].createElement(FeedItem, { feedItem: feed }));
+        items.push(_react2["default"].createElement(FeedItem, { key: feed.id, feedItem: feed }));
       });
 
-      return _react2['default'].createElement(
-        'div',
-        { className: 'feed panel panel-default col-md-7' },
-        _react2['default'].createElement(
-          'div',
-          { className: 'panel-heading' },
-          'フィード'
+      return _react2["default"].createElement(
+        "div",
+        { className: "feed panel panel-default col-md-7" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          "フィード"
         ),
-        _react2['default'].createElement(
-          'div',
-          { className: 'panel-body' },
-          _react2['default'].createElement('input', { className: 'comment', type: 'text', value: this.state.comment, placeholder: 'コメント', onChange: this.handelChangeComment.bind(this) }),
-          _react2['default'].createElement(
-            'div',
-            { className: 'btn_area' },
-            _react2['default'].createElement(
-              'button',
-              { className: 'btn btn-default', onClick: this.handleSubmit.bind(this) },
-              '投稿する'
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement("input", { className: "comment", type: "text", value: this.state.comment, placeholder: "コメント", onChange: this.handelChangeComment.bind(this) }),
+          _react2["default"].createElement(
+            "div",
+            { className: "btn_area" },
+            _react2["default"].createElement(
+              "button",
+              { className: "btn btn-default", onClick: this.handleSubmit.bind(this) },
+              "投稿する"
             )
           )
         ),
-        _react2['default'].createElement(
-          'ul',
-          { className: 'list-group' },
+        _react2["default"].createElement(
+          "ul",
+          { className: "list-group" },
           items
         )
       );
     }
   }, {
-    key: 'handleSubmit',
+    key: "handleSubmit",
     value: function handleSubmit() {
-      this.props.flux.getActions('feed').createFeed(this.state.comment, this.props.event_id);
-      this.setState({ comment: '' });
+      this.props.flux.getActions("feed").createFeed(this.state.comment, this.props.event_id);
+      this.setState({ comment: "" });
     }
   }, {
-    key: 'handelChangeComment',
+    key: "handelChangeComment",
     value: function handelChangeComment(e) {
       this.setState({ comment: e.target.value });
     }
   }]);
 
   return Feed;
-})(_react2['default'].Component);
+})(_react2["default"].Component);
 
-exports['default'] = Feed;
+exports["default"] = Feed;
 
-Feed.defaultProps = { comment: '' };
+Feed.defaultProps = { comment: "" };
 
 var FeedItem = (function (_React$Component2) {
   function FeedItem(props) {
     _classCallCheck(this, FeedItem);
 
-    _get(Object.getPrototypeOf(FeedItem.prototype), 'constructor', this).call(this, props);
+    _get(Object.getPrototypeOf(FeedItem.prototype), "constructor", this).call(this, props);
   }
 
   _inherits(FeedItem, _React$Component2);
 
   _createClass(FeedItem, [{
-    key: 'render',
+    key: "render",
     value: function render() {
-      var date = this.props.feedItem.inserted_at.replace('T', ' ').replace('Z', '');
+      var date = this.props.feedItem.inserted_at.replace("T", " ").replace("Z", "");
 
-      return _react2['default'].createElement(
-        'li',
-        { className: 'list-group-item feedItem' },
-        _react2['default'].createElement(
-          'div',
+      return _react2["default"].createElement(
+        "li",
+        { className: "list-group-item feedItem" },
+        _react2["default"].createElement(
+          "div",
           null,
-          _react2['default'].createElement(
-            'span',
-            { className: 'user' },
+          _react2["default"].createElement(
+            "span",
+            { className: "user" },
             this.props.feedItem.user.name
           ),
-          '　',
-          _react2['default'].createElement(
-            'span',
-            { className: 'date' },
+          "　",
+          _react2["default"].createElement(
+            "span",
+            { className: "date" },
             date
           )
         ),
@@ -28062,9 +28093,9 @@ var FeedItem = (function (_React$Component2) {
   }]);
 
   return FeedItem;
-})(_react2['default'].Component);
+})(_react2["default"].Component);
 
-module.exports = exports['default'];
+module.exports = exports["default"];
 
 },{"flummox/component":2,"react":227}],241:[function(require,module,exports){
 'use strict';
@@ -28254,8 +28285,6 @@ var ParticipantList = (function (_React$Component) {
     _classCallCheck(this, ParticipantList);
 
     _get(Object.getPrototypeOf(ParticipantList.prototype), 'constructor', this).call(this, props);
-    this.props.flux.getActions('participant').fetchAll(this.props.event_id);
-    this.props.flux.getActions('auth').loginUser();
   }
 
   _inherits(ParticipantList, _React$Component);
@@ -28268,7 +28297,7 @@ var ParticipantList = (function (_React$Component) {
 
       var items = [];
       participants.forEach(function (participant) {
-        items.push(_react2['default'].createElement(Participant, { participant: participant }));
+        items.push(_react2['default'].createElement(Participant, { key: participant.id, participant: participant }));
       });
 
       if (loginUser && this.isJoin(loginUser, participants)) {
@@ -28286,6 +28315,7 @@ var ParticipantList = (function (_React$Component) {
       }
 
       var event = this.findEvent(this.props.event_id);
+      var max = event ? event.max : 0;
       return _react2['default'].createElement(
         'div',
         { className: 'participantListarea col-md-4' },
@@ -28305,7 +28335,7 @@ var ParticipantList = (function (_React$Component) {
               { className: 'people' },
               participants.length,
               ' / ',
-              event.max
+              max
             ),
             _react2['default'].createElement(
               'div',
@@ -28574,8 +28604,9 @@ var FeedStore = (function (_Store) {
     _get(Object.getPrototypeOf(FeedStore.prototype), 'constructor', this).call(this);
 
     var feedActions = flux.getActionIds('feed');
-    this.register(feedActions.fetchAll, this.handleFetchAll);
+    this.register(feedActions.__fetchAll, this.handleFetchAll);
     this.register(feedActions.createFeed, this.handleCreateFeed);
+    this.register(feedActions.__clear, this.handleClear);
 
     this.state = {
       feeds: []
@@ -28591,11 +28622,18 @@ var FeedStore = (function (_Store) {
     }
   }, {
     key: 'handleCreateFeed',
-    value: function handleCreateFeed(feed) {
+    value: function handleCreateFeed(feedUser) {
       this.setState(function (state) {
+        var feed = feedUser.feed;
+        feed.user = feedUser.user;
         state.feeds.push(feed);
         return { feeds: state.feeds };
       });
+    }
+  }, {
+    key: 'handleClear',
+    value: function handleClear() {
+      this.setState({ feeds: [] });
     }
   }]);
 
@@ -28629,7 +28667,8 @@ var ParticipantStore = (function (_Store) {
     _get(Object.getPrototypeOf(ParticipantStore.prototype), 'constructor', this).call(this);
 
     var participantActions = flux.getActionIds('participant');
-    this.register(participantActions.fetchAll, this.handleFetchAll);
+    this.register(participantActions.__fetchAll, this.handleFetchAll);
+    this.register(participantActions.__clear, this.handleClear);
     this.register(participantActions.joinEvent, this.handleJoinEvent);
     this.register(participantActions.cancelEvent, this.handleCancelEvent);
 
@@ -28658,6 +28697,11 @@ var ParticipantStore = (function (_Store) {
         return participant.id !== user.id;
       });
       this.setState({ participants: participants });
+    }
+  }, {
+    key: 'handleClear',
+    value: function handleClear() {
+      this.setState({ participants: [] });
     }
   }]);
 

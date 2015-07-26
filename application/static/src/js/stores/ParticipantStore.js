@@ -5,7 +5,8 @@ export default class ParticipantStore extends Store {
     super();
 
     const participantActions = flux.getActionIds('participant');
-    this.register(participantActions.fetchAll, this.handleFetchAll)
+    this.register(participantActions.__fetchAll, this.handleFetchAll)
+    this.register(participantActions.__clear, this.handleClear)
     this.register(participantActions.joinEvent, this.handleJoinEvent)
     this.register(participantActions.cancelEvent, this.handleCancelEvent)
 
@@ -28,6 +29,10 @@ export default class ParticipantStore extends Store {
       return participant.id !== user.id;
     });
     this.setState({participants: participants});
+  }
+
+  handleClear() {
+    this.setState({participants: []});
   }
 
 }

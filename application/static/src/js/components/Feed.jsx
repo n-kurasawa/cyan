@@ -4,7 +4,6 @@ import FluxComponent from 'flummox/component';
 export default class Feed extends React.Component {
   constructor(props) {
     super(props);
-    this.props.flux.getActions('feed').fetchAll(this.props.event_id);
     this.state = {
       comment: props.comment
     };
@@ -16,7 +15,7 @@ export default class Feed extends React.Component {
     var items = [];
     feeds.forEach((feed)=> {
       items.push(
-        <FeedItem feedItem={feed} />
+        <FeedItem key={feed.id} feedItem={feed} />
       );
     });
 

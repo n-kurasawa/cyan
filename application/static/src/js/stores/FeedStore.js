@@ -5,8 +5,9 @@ export default class FeedStore extends Store {
     super();
 
     const feedActions = flux.getActionIds('feed');
-    this.register(feedActions.fetchAll, this.handleFetchAll);
+    this.register(feedActions.__fetchAll, this.handleFetchAll);
     this.register(feedActions.createFeed, this.handleCreateFeed)
+    this.register(feedActions.__clear, this.handleClear)
 
     this.state = {
       feeds: []
@@ -17,10 +18,16 @@ export default class FeedStore extends Store {
     this.setState(feeds);
   }
 
-  handleCreateFeed(feed) {
+  handleCreateFeed(feedUser) {
     this.setState( (state) => {
+      let feed = feedUser.feed;
+      feed.user = feedUser.user;
       state.feeds.push(feed);
       return {feeds: state.feeds};
     });
+  }
+
+  handleClear() {
+    this.setState({feeds: []});
   }
 }

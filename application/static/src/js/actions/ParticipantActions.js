@@ -8,6 +8,11 @@ export default class ParticipantActions extends Actions {
   }
 
   fetchAll(event_id) {
+    this.__clear();
+    this.__fetchAll(event_id);
+  }
+
+  __fetchAll(event_id) {
     return fetch('http://'+ location.host + '/api/event/participants/' + event_id, {
       method: 'get',
       credentials: 'same-origin'
@@ -61,6 +66,10 @@ export default class ParticipantActions extends Actions {
     }).then((json) => {
       return json.user;
     });
+  }
+
+  __clear() {
+    return '';
   }
 
 }
