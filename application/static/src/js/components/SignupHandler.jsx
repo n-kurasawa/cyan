@@ -1,24 +1,22 @@
 import React from "react";
 import FluxComponent from 'flummox/component';
-import { Link } from 'react-router';
 
-export default class LoginHandler extends React.Component {
+export default class SignupHandler extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loginId: props.loginId,
-      pass: props.pass
+      title: props.loginId,
+      date: props.pass
     };
   }
 
   render() {
     return (
-      <div className="form-signin">
-        <h2 className="form-signin-heading">Please sign in</h2>
+      <div className="form-signup signup">
+        <h2 className="form-signup-heading">Please sign up</h2>
         <input type="text" className="form-control" onChange={this.handelChangeLoginId.bind(this)} placeholder="Login ID" required autofocus="" />
         <input type="password" className="form-control" onChange={this.handelChangePass.bind(this)} placeholder="Password" required />
-        <button className="btn btn-lg btn-primary btn-block" onClick={this.handleSubmit.bind(this)}>Sign in</button>
-        <Link to="signup">Sign up</Link>
+        <button className="btn btn-lg btn-primary btn-block" onClick={this.handleSubmit.bind(this)}>Sign up</button>
       </div>
     );
   }
@@ -39,4 +37,4 @@ export default class LoginHandler extends React.Component {
     this.setState({pass: e.target.value});
   }
 }
-LoginHandler.defaultProps = { loginId: '', pass: ''};
+SignupHandler.defaultProps = { loginId: '', pass: ''};

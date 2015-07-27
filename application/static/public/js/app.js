@@ -26898,7 +26898,7 @@ var Flux = (function (_Flummox) {
 exports['default'] = Flux;
 module.exports = exports['default'];
 
-},{"./actions/AuthActions":229,"./actions/EventActions":230,"./actions/FeedActions":231,"./actions/ParticipantActions":232,"./stores/AuthStore":245,"./stores/EventStore":246,"./stores/FeedStore":247,"./stores/ParticipantStore":248,"flummox":4}],229:[function(require,module,exports){
+},{"./actions/AuthActions":229,"./actions/EventActions":230,"./actions/FeedActions":231,"./actions/ParticipantActions":232,"./stores/AuthStore":246,"./stores/EventStore":247,"./stores/FeedStore":248,"./stores/ParticipantStore":249,"flummox":4}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27304,7 +27304,7 @@ router.run(function (Handler, state) {
 
 exports.router = router;
 
-},{"../Flux":228,"../routes":244,"flummox/component":2,"react":227,"react-router":40}],234:[function(require,module,exports){
+},{"../Flux":228,"../routes":245,"flummox/component":2,"react":227,"react-router":40}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27556,16 +27556,6 @@ var EventCreator = (function (_React$Component) {
           ),
           _react2["default"].createElement(
             "div",
-            { className: "item document" },
-            _react2["default"].createElement(
-              "div",
-              { className: "item-title" },
-              "資料"
-            ),
-            _react2["default"].createElement("input", { type: "file", value: this.state.document, onChange: this.handelChangeDocument.bind(this) })
-          ),
-          _react2["default"].createElement(
-            "div",
             { className: "btn_area" },
             _react2["default"].createElement(
               "button",
@@ -27584,8 +27574,7 @@ var EventCreator = (function (_React$Component) {
         date: this.state.date,
         max: this.state.max,
         place: this.state.place,
-        description: this.state.description,
-        document: this.state.document
+        description: this.state.description
       };
       this.props.flux.getActions("event").createEvent(event);
       this.setState({ title: "", date: "", max: "", place: "", description: "", document: "" });
@@ -27727,16 +27716,6 @@ var EventDetail = (function (_React$Component) {
               "詳細"
             ),
             description
-          ),
-          _react2["default"].createElement(
-            "div",
-            { className: "item-detail description" },
-            _react2["default"].createElement(
-              "div",
-              { className: "item-detail-head" },
-              "資料"
-            ),
-            "資料なし"
           )
         )
       );
@@ -28167,93 +28146,100 @@ exports['default'] = HomeHandler;
 module.exports = exports['default'];
 
 },{"./EventCreator.jsx":236,"./EventList.jsx":239,"flummox/component":2,"react":227}],242:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _flummoxComponent = require("flummox/component");
+var _flummoxComponent = require('flummox/component');
 
 var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var _reactRouter = require('react-router');
 
 var LoginHandler = (function (_React$Component) {
   function LoginHandler(props) {
     _classCallCheck(this, LoginHandler);
 
-    _get(Object.getPrototypeOf(LoginHandler.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(LoginHandler.prototype), 'constructor', this).call(this, props);
     this.state = {
-      title: props.loginId,
-      date: props.pass
+      loginId: props.loginId,
+      pass: props.pass
     };
   }
 
   _inherits(LoginHandler, _React$Component);
 
   _createClass(LoginHandler, [{
-    key: "render",
+    key: 'render',
     value: function render() {
-      return _react2["default"].createElement(
-        "div",
-        { className: "form-signin" },
-        _react2["default"].createElement(
-          "h2",
-          { className: "form-signin-heading" },
-          "Please sign in"
+      return _react2['default'].createElement(
+        'div',
+        { className: 'form-signin' },
+        _react2['default'].createElement(
+          'h2',
+          { className: 'form-signin-heading' },
+          'Please sign in'
         ),
-        _react2["default"].createElement("input", { type: "text", className: "form-control", onChange: this.handelChangeLoginId.bind(this), placeholder: "Login ID", required: true, autofocus: "" }),
-        _react2["default"].createElement("input", { type: "password", className: "form-control", onChange: this.handelChangePass.bind(this), placeholder: "Password", required: true }),
-        _react2["default"].createElement(
-          "button",
-          { className: "btn btn-lg btn-primary btn-block", onClick: this.handleSubmit.bind(this) },
-          "Sign in"
+        _react2['default'].createElement('input', { type: 'text', className: 'form-control', onChange: this.handelChangeLoginId.bind(this), placeholder: 'Login ID', required: true, autofocus: '' }),
+        _react2['default'].createElement('input', { type: 'password', className: 'form-control', onChange: this.handelChangePass.bind(this), placeholder: 'Password', required: true }),
+        _react2['default'].createElement(
+          'button',
+          { className: 'btn btn-lg btn-primary btn-block', onClick: this.handleSubmit.bind(this) },
+          'Sign in'
+        ),
+        _react2['default'].createElement(
+          _reactRouter.Link,
+          { to: 'signup' },
+          'Sign up'
         )
       );
     }
   }, {
-    key: "handleSubmit",
+    key: 'handleSubmit',
     value: function handleSubmit() {
       var auth = {
         loginId: this.state.loginId,
         pass: this.state.pass
       };
-      this.props.flux.getActions("auth").login(auth);
+      this.props.flux.getActions('auth').login(auth);
     }
   }, {
-    key: "handelChangeLoginId",
+    key: 'handelChangeLoginId',
     value: function handelChangeLoginId(e) {
       this.setState({ loginId: e.target.value });
     }
   }, {
-    key: "handelChangePass",
+    key: 'handelChangePass',
     value: function handelChangePass(e) {
       this.setState({ pass: e.target.value });
     }
   }]);
 
   return LoginHandler;
-})(_react2["default"].Component);
+})(_react2['default'].Component);
 
-exports["default"] = LoginHandler;
+exports['default'] = LoginHandler;
 
-LoginHandler.defaultProps = { loginId: "", pass: "" };
-module.exports = exports["default"];
+LoginHandler.defaultProps = { loginId: '', pass: '' };
+module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227}],243:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28409,6 +28395,93 @@ var Participant = (function (_React$Component2) {
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],244:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _flummoxComponent = require("flummox/component");
+
+var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var SignupHandler = (function (_React$Component) {
+  function SignupHandler(props) {
+    _classCallCheck(this, SignupHandler);
+
+    _get(Object.getPrototypeOf(SignupHandler.prototype), "constructor", this).call(this, props);
+    this.state = {
+      title: props.loginId,
+      date: props.pass
+    };
+  }
+
+  _inherits(SignupHandler, _React$Component);
+
+  _createClass(SignupHandler, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "form-signup signup" },
+        _react2["default"].createElement(
+          "h2",
+          { className: "form-signup-heading" },
+          "Please sign up"
+        ),
+        _react2["default"].createElement("input", { type: "text", className: "form-control", onChange: this.handelChangeLoginId.bind(this), placeholder: "Login ID", required: true, autofocus: "" }),
+        _react2["default"].createElement("input", { type: "password", className: "form-control", onChange: this.handelChangePass.bind(this), placeholder: "Password", required: true }),
+        _react2["default"].createElement(
+          "button",
+          { className: "btn btn-lg btn-primary btn-block", onClick: this.handleSubmit.bind(this) },
+          "Sign up"
+        )
+      );
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      var auth = {
+        loginId: this.state.loginId,
+        pass: this.state.pass
+      };
+      this.props.flux.getActions("auth").login(auth);
+    }
+  }, {
+    key: "handelChangeLoginId",
+    value: function handelChangeLoginId(e) {
+      this.setState({ loginId: e.target.value });
+    }
+  }, {
+    key: "handelChangePass",
+    value: function handelChangePass(e) {
+      this.setState({ pass: e.target.value });
+    }
+  }]);
+
+  return SignupHandler;
+})(_react2["default"].Component);
+
+exports["default"] = SignupHandler;
+
+SignupHandler.defaultProps = { loginId: "", pass: "" };
+module.exports = exports["default"];
+
+},{"flummox/component":2,"react":227}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28439,6 +28512,10 @@ var _componentsEventHandlerJsx = require('./components/EventHandler.jsx');
 
 var _componentsEventHandlerJsx2 = _interopRequireDefault(_componentsEventHandlerJsx);
 
+var _componentsSignupHandlerJsx = require('./components/SignupHandler.jsx');
+
+var _componentsSignupHandlerJsx2 = _interopRequireDefault(_componentsSignupHandlerJsx);
+
 var _componentsAuthCheckJsx = require('./components/AuthCheck.jsx');
 
 var _componentsAuthCheckJsx2 = _interopRequireDefault(_componentsAuthCheckJsx);
@@ -28447,13 +28524,14 @@ exports['default'] = _react2['default'].createElement(
   _reactRouter.Route,
   { name: 'app', path: '/', handler: _componentsAppHandlerJsx2['default'] },
   _react2['default'].createElement(_reactRouter.Route, { name: 'login', path: '/login', handler: _componentsLoginHandlerJsx2['default'] }),
+  _react2['default'].createElement(_reactRouter.Route, { name: 'signup', path: '/signup', handler: _componentsSignupHandlerJsx2['default'] }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'events', path: '/events', handler: (0, _componentsAuthCheckJsx2['default'])(_componentsHomeHandlerJsx2['default']) }),
   _react2['default'].createElement(_reactRouter.Route, { name: 'event', path: '/events/:id', handler: (0, _componentsAuthCheckJsx2['default'])(_componentsEventHandlerJsx2['default']) }),
   _react2['default'].createElement(_reactRouter.Redirect, { from: '*', to: 'events' })
 );
 module.exports = exports['default'];
 
-},{"./components/AppHandler.jsx":234,"./components/AuthCheck.jsx":235,"./components/EventHandler.jsx":238,"./components/HomeHandler.jsx":241,"./components/LoginHandler.jsx":242,"react":227,"react-router":40}],245:[function(require,module,exports){
+},{"./components/AppHandler.jsx":234,"./components/AuthCheck.jsx":235,"./components/EventHandler.jsx":238,"./components/HomeHandler.jsx":241,"./components/LoginHandler.jsx":242,"./components/SignupHandler.jsx":244,"react":227,"react-router":40}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28505,7 +28583,7 @@ var AuthStore = (function (_Store) {
 exports['default'] = AuthStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],246:[function(require,module,exports){
+},{"flummox":4}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28580,7 +28658,7 @@ var EventStore = (function (_Store) {
 exports['default'] = EventStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],247:[function(require,module,exports){
+},{"flummox":4}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28643,7 +28721,7 @@ var FeedStore = (function (_Store) {
 exports['default'] = FeedStore;
 module.exports = exports['default'];
 
-},{"flummox":4}],248:[function(require,module,exports){
+},{"flummox":4}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

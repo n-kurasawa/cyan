@@ -39,10 +39,6 @@ export default class EventCreator extends React.Component {
             <textarea value={this.state.description} onChange={this.handelChangeDescription.bind(this)} >
             </textarea>
           </div>
-          <div className="item document">
-            <div className="item-title">資料</div>
-            <input type="file" value={this.state.document} onChange={this.handelChangeDocument.bind(this)} />
-          </div>
           <div className="btn_area">
             <button className="btn btn-default" onClick={this.handleSubmit.bind(this)}>作成</button>
           </div>
@@ -58,7 +54,6 @@ export default class EventCreator extends React.Component {
       max: this.state.max,
       place: this.state.place,
       description: this.state.description,
-      document: this.state.document
     };
     this.props.flux.getActions('event').createEvent(event);
     this.setState({ title: '', date: '', max: '', place: '', description: '', document: ''})

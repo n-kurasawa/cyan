@@ -34,10 +34,6 @@ export default class EventDetail extends React.Component {
             <div className="item-detail-head">詳細</div>
             {description}
           </div>
-          <div className="item-detail description">
-            <div className="item-detail-head">資料</div>
-            資料なし
-          </div>
         </div>
       </div>
     );
