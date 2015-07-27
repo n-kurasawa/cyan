@@ -29,6 +29,37 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.form-signin .signup_area {
+  margin-top: 10px;
+  text-align: center;
+}
+.form-signup {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signup .form-signin-heading {
+  margin-bottom: 10px;
+}
+.form-signup .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 14px;
+}
+.form-signup .input-group {
+  margin-bottom: 15px;
+}
+.form-signup input {
+  margin-bottom: 15px;
+}
+.form-signup .signin_area {
+  margin-top: 10px;
+  text-align: center;
+}
 .eventList {
   padding: 0;
 }

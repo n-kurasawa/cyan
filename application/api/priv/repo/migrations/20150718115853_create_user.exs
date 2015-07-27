@@ -3,10 +3,10 @@ defmodule Api.Repo.Migrations.CreateUser do
 
   def change do
     create table(:users) do
-      add :login_id, :string
-      add :pass, :string
+      add :account_id, :string
+      add :password, :string
       add :name, :string
-      add :mail, :string
+      add :email, :string
 
       timestamps
     end

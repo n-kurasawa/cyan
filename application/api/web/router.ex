@@ -20,9 +20,13 @@ defmodule Api.Router do
     get "/event/participants/:event_id", EventController, :participants
     post "/event/join", EventController, :join
     post "/event/cancel", EventController, :cancel
+
+    post "/users", UserController, :create
+
     post "/login", AuthController, :login
     get "/login/user", AuthController, :loginUser
     get "/login/check", AuthController, :check
+
     get "/feeds/:event_id", FeedController, :index
     post "/feeds/:event_id", FeedController, :create
   end

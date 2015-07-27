@@ -4,10 +4,10 @@ defmodule Api.AuthController do
   require Logger
   plug :action
 
-  def login(conn, %{"auth" => %{"loginId" => loginId, "pass" => pass}}) do
+  def login(conn, %{"auth" => %{"account_id" => account_id, "password" => password}}) do
     query = from u in User,
-               where: u.login_id == ^loginId,
-               where: u.pass == ^pass,
+               where: u.account_id == ^account_id,
+               where: u.password == ^password,
                select: u
     user = Repo.one(query)
 

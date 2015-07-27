@@ -7,6 +7,7 @@ export default class AuthStore extends Store {
     const authActions = flux.getActionIds('auth');
     this.register(authActions.login, this.handleLogin);
     this.register(authActions.loginUser, this.handleLoginUser);
+    this.register(authActions.createUser, this.handleCreateUser);
 
     this.state = {
       user: null
@@ -18,6 +19,10 @@ export default class AuthStore extends Store {
   }
 
   handleLoginUser(user) {
+    this.setState({user: user});
+  }
+
+  handleCreateUser(user) {
     this.setState({user: user});
   }
 }

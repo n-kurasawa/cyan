@@ -23,7 +23,7 @@ defmodule Api.EventController do
       new_event = Repo.insert(changeset)
 
       conn
-      |> put_flash(:info, "User created successfully.")
+      |> put_flash(:info, "Event created successfully.")
 
       render conn, event: Map.put(new_event, "user", user)
     else

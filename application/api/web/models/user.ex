@@ -3,19 +3,19 @@ defmodule Api.User do
   import Ecto.Query
 
   schema "users" do
-    field :login_id, :string
-    field :pass, :string
+    field :account_id, :string
+    field :password, :string
     field :name, :string
-    field :mail, :string
+    field :email, :string
 
-    has_many :events, Apu.Event
-    has_many :event_user, Apu.EventUser
+    has_many :events, Api.Event
+    has_many :event_user, Api.EventUser
 
     timestamps
   end
 
-  @required_fields ~w(login_id pass name mail)
-  @optional_fields ~w()
+  @required_fields ~w(account_id password name)
+  @optional_fields ~w(email)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

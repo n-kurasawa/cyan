@@ -26968,6 +26968,30 @@ var AuthActions = (function (_Actions) {
         return json.user;
       });
     }
+  }, {
+    key: 'createUser',
+    value: function createUser(user) {
+      return fetch('http://' + location.host + '/api/users', {
+        credentials: 'same-origin',
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user: user })
+      }).then(function (response) {
+
+        if (response.status >= 400) {
+          throw new Error('Bad response from server');
+        }
+        return response.json();
+      }).then(function (json) {
+        if (json.user) {
+          _componentsAppJsx.router.transitionTo('events');
+        }
+        return json.user;
+      });
+    }
   }]);
 
   return AuthActions;
@@ -28178,8 +28202,8 @@ var LoginHandler = (function (_React$Component) {
 
     _get(Object.getPrototypeOf(LoginHandler.prototype), 'constructor', this).call(this, props);
     this.state = {
-      loginId: props.loginId,
-      pass: props.pass
+      account_id: props.account_id,
+      password: props.password
     };
   }
 
@@ -28196,17 +28220,21 @@ var LoginHandler = (function (_React$Component) {
           { className: 'form-signin-heading' },
           'Please sign in'
         ),
-        _react2['default'].createElement('input', { type: 'text', className: 'form-control', onChange: this.handelChangeLoginId.bind(this), placeholder: 'Login ID', required: true, autofocus: '' }),
-        _react2['default'].createElement('input', { type: 'password', className: 'form-control', onChange: this.handelChangePass.bind(this), placeholder: 'Password', required: true }),
+        _react2['default'].createElement('input', { type: 'text', className: 'form-control', onChange: this.handelChangeLoginId.bind(this), placeholder: 'アカウント ID', required: true, autofocus: '' }),
+        _react2['default'].createElement('input', { type: 'password', className: 'form-control', onChange: this.handelChangePass.bind(this), placeholder: 'パスワード', required: true }),
         _react2['default'].createElement(
           'button',
           { className: 'btn btn-lg btn-primary btn-block', onClick: this.handleSubmit.bind(this) },
           'Sign in'
         ),
         _react2['default'].createElement(
-          _reactRouter.Link,
-          { to: 'signup' },
-          'Sign up'
+          'div',
+          { className: 'signup_area' },
+          _react2['default'].createElement(
+            _reactRouter.Link,
+            { to: 'signup' },
+            'Sign up'
+          )
         )
       );
     }
@@ -28214,20 +28242,20 @@ var LoginHandler = (function (_React$Component) {
     key: 'handleSubmit',
     value: function handleSubmit() {
       var auth = {
-        loginId: this.state.loginId,
-        pass: this.state.pass
+        account_id: this.state.account_id,
+        password: this.state.password
       };
       this.props.flux.getActions('auth').login(auth);
     }
   }, {
     key: 'handelChangeLoginId',
     value: function handelChangeLoginId(e) {
-      this.setState({ loginId: e.target.value });
+      this.setState({ account_id: e.target.value });
     }
   }, {
     key: 'handelChangePass',
     value: function handelChangePass(e) {
-      this.setState({ pass: e.target.value });
+      this.setState({ password: e.target.value });
     }
   }]);
 
@@ -28236,7 +28264,7 @@ var LoginHandler = (function (_React$Component) {
 
 exports['default'] = LoginHandler;
 
-LoginHandler.defaultProps = { loginId: '', pass: '' };
+LoginHandler.defaultProps = { account_id: '', password: '' };
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],243:[function(require,module,exports){
@@ -28395,93 +28423,129 @@ var Participant = (function (_React$Component2) {
 module.exports = exports['default'];
 
 },{"flummox/component":2,"react":227,"react-router":40}],244:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _flummoxComponent = require("flummox/component");
+var _flummoxComponent = require('flummox/component');
 
 var _flummoxComponent2 = _interopRequireDefault(_flummoxComponent);
+
+var _reactRouter = require('react-router');
 
 var SignupHandler = (function (_React$Component) {
   function SignupHandler(props) {
     _classCallCheck(this, SignupHandler);
 
-    _get(Object.getPrototypeOf(SignupHandler.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(SignupHandler.prototype), 'constructor', this).call(this, props);
     this.state = {
-      title: props.loginId,
-      date: props.pass
+      account_id: props.account_id,
+      password: props.password,
+      email: props.email,
+      name: props.name
     };
   }
 
   _inherits(SignupHandler, _React$Component);
 
   _createClass(SignupHandler, [{
-    key: "render",
+    key: 'render',
     value: function render() {
-      return _react2["default"].createElement(
-        "div",
-        { className: "form-signup signup" },
-        _react2["default"].createElement(
-          "h2",
-          { className: "form-signup-heading" },
-          "Please sign up"
+      return _react2['default'].createElement(
+        'div',
+        { className: 'form-signup signup' },
+        _react2['default'].createElement(
+          'h2',
+          { className: 'form-signup-heading' },
+          'Please sign up'
         ),
-        _react2["default"].createElement("input", { type: "text", className: "form-control", onChange: this.handelChangeLoginId.bind(this), placeholder: "Login ID", required: true, autofocus: "" }),
-        _react2["default"].createElement("input", { type: "password", className: "form-control", onChange: this.handelChangePass.bind(this), placeholder: "Password", required: true }),
-        _react2["default"].createElement(
-          "button",
-          { className: "btn btn-lg btn-primary btn-block", onClick: this.handleSubmit.bind(this) },
-          "Sign up"
+        _react2['default'].createElement(
+          'div',
+          { className: 'input-group' },
+          _react2['default'].createElement(
+            'span',
+            { className: 'input-group-addon' },
+            '@'
+          ),
+          _react2['default'].createElement('input', { type: 'text', className: 'form-control', onChange: this.handelChangeAccountId.bind(this), placeholder: 'アカウント ID', required: true, autofocus: '' })
+        ),
+        _react2['default'].createElement('input', { type: 'email', className: 'form-control', onChange: this.handelChangeEmail.bind(this), placeholder: 'メールアドレス' }),
+        _react2['default'].createElement('input', { type: 'text', className: 'form-control', onChange: this.handelChangeName.bind(this), placeholder: '名前', required: true, autofocus: '' }),
+        _react2['default'].createElement('input', { type: 'password', className: 'form-control', onChange: this.handelChangePass.bind(this), placeholder: 'パスワード', required: true }),
+        _react2['default'].createElement(
+          'button',
+          { className: 'btn btn-lg btn-primary btn-block', onClick: this.handleSubmit.bind(this) },
+          'Sign up'
+        ),
+        _react2['default'].createElement(
+          'div',
+          { className: 'signin_area' },
+          _react2['default'].createElement(
+            _reactRouter.Link,
+            { to: 'login' },
+            'Sign in'
+          )
         )
       );
     }
   }, {
-    key: "handleSubmit",
+    key: 'handleSubmit',
     value: function handleSubmit() {
-      var auth = {
-        loginId: this.state.loginId,
-        pass: this.state.pass
+      var user = {
+        account_id: this.state.account_id,
+        password: this.state.password,
+        email: this.state.email,
+        name: this.state.name
       };
-      this.props.flux.getActions("auth").login(auth);
+      this.props.flux.getActions('auth').createUser(user);
     }
   }, {
-    key: "handelChangeLoginId",
-    value: function handelChangeLoginId(e) {
-      this.setState({ loginId: e.target.value });
+    key: 'handelChangeAccountId',
+    value: function handelChangeAccountId(e) {
+      this.setState({ account_id: e.target.value });
     }
   }, {
-    key: "handelChangePass",
+    key: 'handelChangePass',
     value: function handelChangePass(e) {
-      this.setState({ pass: e.target.value });
+      this.setState({ password: e.target.value });
+    }
+  }, {
+    key: 'handelChangeEmail',
+    value: function handelChangeEmail(e) {
+      this.setState({ email: e.target.value });
+    }
+  }, {
+    key: 'handelChangeName',
+    value: function handelChangeName(e) {
+      this.setState({ name: e.target.value });
     }
   }]);
 
   return SignupHandler;
-})(_react2["default"].Component);
+})(_react2['default'].Component);
 
-exports["default"] = SignupHandler;
+exports['default'] = SignupHandler;
 
-SignupHandler.defaultProps = { loginId: "", pass: "" };
-module.exports = exports["default"];
+SignupHandler.defaultProps = { account_id: '', password: '', email: '', name: '' };
+module.exports = exports['default'];
 
-},{"flummox/component":2,"react":227}],245:[function(require,module,exports){
+},{"flummox/component":2,"react":227,"react-router":40}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28557,6 +28621,7 @@ var AuthStore = (function (_Store) {
     var authActions = flux.getActionIds('auth');
     this.register(authActions.login, this.handleLogin);
     this.register(authActions.loginUser, this.handleLoginUser);
+    this.register(authActions.createUser, this.handleCreateUser);
 
     this.state = {
       user: null
@@ -28573,6 +28638,11 @@ var AuthStore = (function (_Store) {
   }, {
     key: 'handleLoginUser',
     value: function handleLoginUser(user) {
+      this.setState({ user: user });
+    }
+  }, {
+    key: 'handleCreateUser',
+    value: function handleCreateUser(user) {
       this.setState({ user: user });
     }
   }]);
