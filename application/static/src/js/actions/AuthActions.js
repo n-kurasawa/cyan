@@ -1,74 +1,30 @@
-import { Actions } from 'flummox';
-import 'isomorphic-fetch';
-import {router} from '../components/App.jsx'
+import * as fetchUtils from '../utils/fetchUtils';
+import { LOGIN_ACTION,
+         LOGIN_USER_ACTION,
+         CREATE_USER_ACTION
+       } from '../constants/ActionTypes';
 
-export default class AuthActions extends Actions {
-
-  constructor() {
-    super();
+export async function login(auth, router) {
+  let json = await fetchUtils.post('/api/login', { auth });
+  if (json.user) {
+    router.transitionTo('events');
   }
+}
 
-  login(auth) {
-    return fetch('http://'+ location.host + '/api/login', {
-      credentials: 'same-origin',
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( { auth: auth } )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      if (json.user) {
-        router.transitionTo('events');
-      }
-      return json.user;
-    });
+export async function createUser(user, router) {
+  let json = await fetchUtils.post('/api/users',{ user });
+  if (json.user) {
+    router.transitionTo('events');
   }
+}
 
-  loginUser() {
-    return fetch('http://'+ location.host + '/api/login/user', {
-      credentials: 'same-origin',
-      method: 'get',
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return json.user;
-    });
-  }
-
-  createUser(user) {
-    return fetch('http://'+ location.host + '/api/users', {
-      credentials: 'same-origin',
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( { user: user } )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      if (json.user) {
-        router.transitionTo('events');
-      }
-      return json.user;
-    });
-  }
+export function loginUser() {
+  return dispatch => {
+   fetchUtils.get('/api/login/user').then(json=>{
+     dispatch({
+       type: LOGIN_USER_ACTION,
+       user: json.user
+     });
+   });
+ };
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
 import { Link } from 'react-router';
 
 export default class ParticipantList extends React.Component {
@@ -45,11 +44,11 @@ export default class ParticipantList extends React.Component {
   }
 
   handleSubmit() {
-    this.props.flux.getActions('participant').joinEvent(this.props.event_id);
+    this.props.joinEvent(this.props.event_id);
   }
 
   handleCancel() {
-    this.props.flux.getActions('participant').cancelEvent(this.props.event_id);
+    this.props.cancelEvent(this.props.event_id);
   }
 
   findEvent(id) {

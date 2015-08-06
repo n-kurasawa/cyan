@@ -1,5 +1,4 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
 
 export default class Feed extends React.Component {
   constructor(props) {
@@ -38,7 +37,7 @@ export default class Feed extends React.Component {
   }
 
   handleSubmit() {
-    this.props.flux.getActions('feed').createFeed(this.state.comment, this.props.event_id);
+    this.props.createFeed(this.state.comment, this.props.event_id);
     this.setState({ comment: ''})
 
   }
@@ -63,5 +62,4 @@ class FeedItem extends React.Component {
       </li>
     );
   }
-
 }

@@ -1,14 +1,22 @@
-import React from "react";
-import FluxComponent from 'flummox/component';
+import React, { PropTypes } from 'react';
+import { connect } from 'redux/react';
 import { Link } from 'react-router';
+import * as AuthActions from '../actions/AuthActions';
 
-export default class LoginHandler extends React.Component {
+@connect(state => ({
+  auth: state.auth
+}))
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       account_id: props.account_id,
       password: props.password
     };
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
   render() {
@@ -30,7 +38,7 @@ export default class LoginHandler extends React.Component {
       account_id: this.state.account_id,
       password: this.state.password
     };
-    this.props.flux.getActions('auth').login(auth);
+    this.props.dispatch(AuthActions.login(auth, this.context.router));
   }
 
   handelChangeLoginId(e) {
@@ -41,4 +49,4 @@ export default class LoginHandler extends React.Component {
     this.setState({password: e.target.value});
   }
 }
-LoginHandler.defaultProps = { account_id: '', password: ''};
+Login.defaultProps = { account_id: '', password: ''};

@@ -1,5 +1,4 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
 
 export default class EventCreator extends React.Component {
   constructor(props) {
@@ -55,7 +54,7 @@ export default class EventCreator extends React.Component {
       place: this.state.place,
       description: this.state.description,
     };
-    this.props.flux.getActions('event').createEvent(event);
+    this.props.createEvent(event);
     this.setState({ title: '', date: '', max: '', place: '', description: '', document: ''})
   }
 

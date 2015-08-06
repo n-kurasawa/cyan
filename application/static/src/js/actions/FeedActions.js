@@ -1,53 +1,33 @@
-import { Actions } from 'flummox';
-import 'isomorphic-fetch';
+import * as fetchUtils from '../utils/fetchUtils';
+import { FEED_ALL_ACTION,
+         CREATE_FEED_ACTION,
+         CLEAR_FEED_ACTION
+       } from '../constants/ActionTypes';
 
-export default class FeedActions extends Actions {
-
-  constructor() {
-    super();
-  }
-
-  fetchAll(event_id) {
-    this.__clear();
-    this.__fetchAll(event_id);
-  }
-
-  __fetchAll(event_id) {
-    return fetch('http://'+ location.host + '/api/feeds/' + event_id, {
-      method: 'get',
-      credentials: 'same-origin'
-    }).then((response) => {
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-    }).then((feeds) => {
-      return feeds;
+export function fetchAll(event_id) {
+  return dispatch => {
+    fetchUtils.get('/api/feeds/' + event_id).then(json=>{
+      dispatch({
+        type: FEED_ALL_ACTION,
+        feeds: json.feeds
+      });
     });
   }
+}
 
-  createFeed(feed, fetchAll) {
-    return fetch('http://'+ location.host + '/api/feeds/' + fetchAll, {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( { feed: feed} )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return {feed: json.feed, user: json.user};
+export function createFeed(feed, fetchAll) {
+  return dispatch => {
+    fetchUtils.post('/api/feeds/' + fetchAll, { feed }).then(json => {
+      dispatch({
+        type: CREATE_FEED_ACTION,
+        feedUser: {feed: json.feed, user: json.user}
+      });
     });
-  }
+  };
+}
 
-  __clear() {
-    return 'clear';
+export function clear() {
+  return {
+    type: CLEAR_FEED_ACTION
   }
 }

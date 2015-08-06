@@ -1,8 +1,6 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
-import { RouteHandler } from 'react-router';
 
-export default class AppHandler extends React.Component {
+export default class Application extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -16,9 +14,7 @@ export default class AppHandler extends React.Component {
           </div>
         </nav>
         <div className="container">
-          <FluxComponent>
-            <RouteHandler/>
-          </FluxComponent>
+          {this.props.children}
         </div>
       </div>
     );

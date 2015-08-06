@@ -1,11 +1,10 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
 import { Link } from 'react-router';
 
 export default class EventList extends React.Component {
   constructor(props) {
     super(props);
-    this.props.flux.getActions('event').fetchAll();
+    this.props.fetchAll();
   }
 
   render() {

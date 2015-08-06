@@ -1,5 +1,4 @@
 import React from "react";
-import FluxComponent from 'flummox/component';
 
 export default class EventDetail extends React.Component {
   constructor(props) {

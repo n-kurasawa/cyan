@@ -9,7 +9,7 @@ var nib = require('nib');
 
 gulp.task('js', function() {
   return browserify({
-      entries:['./src/js/components/App.jsx'],
+      entries:['./src/js/index.js'],
       extensions:['js', 'jsx']
   })
   .transform(babelify)

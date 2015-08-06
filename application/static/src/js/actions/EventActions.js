@@ -1,66 +1,38 @@
-import { Actions } from 'flummox';
-import 'isomorphic-fetch';
+import * as fetchUtils from '../utils/fetchUtils';
+import { EVENT_ALL_ACTION,
+         CREATE_EVENT_ACTION,
+         JOIN_EVENT_ACTION
+       } from '../constants/ActionTypes';
 
-export default class EventActions extends Actions {
-
-  constructor() {
-    super();
-  }
-
-  fetchAll() {
-    return fetch('http://'+ location.host + '/api/events', {
-      method: 'get',
-      credentials: 'same-origin'
-    }).then((response) => {
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-    }).then((events) => {
-      return events;
+export function fetchAll() {
+  return dispatch => {
+    fetchUtils.get('/api/events').then(json => {
+      dispatch({
+        type: EVENT_ALL_ACTION,
+        events: json.events
+      });
     });
-  }
+  };
+}
 
-  createEvent(event) {
-    return fetch('http://'+ location.host + '/api/events', {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( { event: event} )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return json.event;
+export function createEvent(event) {
+  return dispatch => {
+    fetchUtils.post('/api/events', { event }).then(json=>{
+      dispatch({
+        type: CREATE_EVENT_ACTION,
+        event: json.event
+      });
     });
-  }
+  };
+}
 
-  joinEvent(event_id) {
-    return fetch('http://'+ location.host + '/api/event/join', {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( {event_id: event_id} )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return {id: json.event.id, join_user: json.join_user};
+export function joinEvent(event_id) {
+  return dispatch => {
+    fetchUtils.post('/api/event/join', { event_id }).then(json => {
+      dispatch({
+        type: JOIN_EVENT_ACTION,
+        join: {id: json.event.id, join_user: json.join_user}
+      });
     });
-  }
-
+  };
 }

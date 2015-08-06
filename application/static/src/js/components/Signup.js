@@ -1,8 +1,12 @@
-import React from "react";
-import FluxComponent from 'flummox/component';
+import React, { PropTypes } from 'react';
+import { connect } from 'redux/react';
 import { Link } from 'react-router';
+import * as AuthActions from '../actions/AuthActions';
 
-export default class SignupHandler extends React.Component {
+@connect(state => ({
+  auth: state.auth
+}))
+export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,6 +15,10 @@ export default class SignupHandler extends React.Component {
       email: props.email,
       name: props.name
     };
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
   render() {
@@ -39,7 +47,7 @@ export default class SignupHandler extends React.Component {
       email: this.state.email,
       name: this.state.name
     };
-    this.props.flux.getActions('auth').createUser(user);
+    this.props.dispatch(AuthActions.createUser(user, this.context.router));
   }
 
   handelChangeAccountId(e) {
@@ -58,4 +66,4 @@ export default class SignupHandler extends React.Component {
     this.setState({name: e.target.value});
   }
 }
-SignupHandler.defaultProps = { account_id: '', password: '', email:'', name: ''};
+Signup.defaultProps = { account_id: '', password: '', email:'', name: ''};

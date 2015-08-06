@@ -1,75 +1,45 @@
-import { Actions } from 'flummox';
-import 'isomorphic-fetch';
+import * as fetchUtils from '../utils/fetchUtils';
+import { PARTICIPANT_ALL_ACTION,
+         PARTICIPANT_CANCEL_EVENT_ACTION,
+         PARTICIPANT_JOIN_EVENT_ACTION,
+         PARTICIPANT_CLEAR_ACTION
+       } from '../constants/ActionTypes';
 
-export default class ParticipantActions extends Actions {
+export function fetchAll(event_id) {
+  return dispatch => {
+    fetchUtils.get('/api/event/participants/' + event_id).then(json => {
+      dispatch({
+        type: PARTICIPANT_ALL_ACTION,
+        users: json.users
+      });
+    });
+  };
+}
 
-  constructor() {
-    super();
-  }
-
-  fetchAll(event_id) {
-    this.__clear();
-    this.__fetchAll(event_id);
-  }
-
-  __fetchAll(event_id) {
-    return fetch('http://'+ location.host + '/api/event/participants/' + event_id, {
-      method: 'get',
-      credentials: 'same-origin'
-    }).then((response) => {
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-    }).then((json) => {
-      return json.users;
+export function joinEvent(event_id) {
+  return dispatch => {
+    fetchUtils.post('/api/event/join', { event_id }).then(json => {
+      dispatch({
+        type: PARTICIPANT_JOIN_EVENT_ACTION,
+        user: json.user
+      });
     });
   }
+}
 
-  joinEvent(event_id) {
-    return fetch('http://'+ location.host + '/api/event/join', {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( {event_id: event_id} )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return json.user;
+export function cancelEvent(event_id) {
+  return dispatch => {
+    fetchUtils.post('/api/event/cancel', { event_id }).then(json => {
+      dispatch({
+        type: PARTICIPANT_CANCEL_EVENT_ACTION,
+        user: json.user
+      });
     });
+  };
+}
+
+export function clear() {
+  return {
+    type: PARTICIPANT_CLEAR_ACTION
   }
-
-  cancelEvent(event_id) {
-    return fetch('http://'+ location.host + '/api/event/cancel', {
-      method: 'post',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( {event_id: event_id} )
-    }).then((response) => {
-
-      if (response.status >= 400) {
-        throw new Error("Bad response from server");
-      }
-      return response.json();
-
-    }).then((json) => {
-      return json.user;
-    });
-  }
-
-  __clear() {
-    return '';
-  }
-
 }
