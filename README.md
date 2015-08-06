@@ -4,7 +4,8 @@
 ### Frontend
 * ES6
 * React
-* Flummox
+* Redux
+* react-router
 
 ### Backend
 * Elixir
