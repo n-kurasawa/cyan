@@ -42,7 +42,7 @@ function renderRoutes(history) {
 async function requireAuth(nextState, transition, callback) {
   let json = await fetchUtils.get('/api/login/check');
   if (!json.isLogin) {
-    transition.to('login', null, { nextPathname: nextState.location.pathname });
+    transition.to('/login', null, { nextPathname: nextState.location.pathname });
   }
   callback();
 }

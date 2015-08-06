@@ -27692,7 +27692,7 @@ function requireAuth(nextState, transition, callback) {
         json = context$1$0.sent;
 
         if (!json.isLogin) {
-          transition.to('login', null, { nextPathname: nextState.location.pathname });
+          transition.to('/login', null, { nextPathname: nextState.location.pathname });
         }
         callback();
 
