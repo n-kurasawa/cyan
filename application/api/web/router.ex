@@ -24,6 +24,7 @@ defmodule Api.Router do
     post "/users", UserController, :create
 
     post "/login", AuthController, :login
+    post "/logout", AuthController, :logout
     get "/login/user", AuthController, :loginUser
     get "/login/check", AuthController, :check
 

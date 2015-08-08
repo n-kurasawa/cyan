@@ -22,7 +22,6 @@ export default class Event extends React.Component {
     dispatch(EventActions.fetchAll());
     dispatch(FeedActions.fetchAll(this.props.params.id));
     dispatch(ParticipantActions.fetchAll(this.props.params.id));
-    dispatch(AuthActions.loginUser());
   }
 
   render() {

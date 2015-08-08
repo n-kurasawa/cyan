@@ -17,6 +17,11 @@ defmodule Api.AuthController do
     render conn, user: user
   end
 
+  def logout(conn, _params) do
+    conn = put_session(conn, :user, nil)
+    render conn, logout: true
+  end
+
   def loginUser(conn, _params) do
     user = get_session(conn, :user)
     render conn, user: user

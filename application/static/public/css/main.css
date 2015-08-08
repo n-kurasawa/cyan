@@ -2,6 +2,9 @@ body {
   margin: 0;
   padding: 0;
 }
+.application .sign-out {
+  margin: 7px 10px 0 0;
+}
 .form-signin {
   max-width: 330px;
   padding: 15px;

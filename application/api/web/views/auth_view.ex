@@ -5,6 +5,10 @@ defmodule Api.AuthView do
     %{user: user}
   end
 
+  def render("logout.json", %{logout: succes}) do
+    %{logout: succes}
+  end
+
   def render("loginUser.json", %{user: user}) do
     %{user: user}
   end

@@ -27711,6 +27711,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.login = login;
+exports.logout = logout;
 exports.createUser = createUser;
 exports.loginUser = loginUser;
 
@@ -27723,47 +27724,44 @@ var fetchUtils = _interopRequireWildcard(_utilsFetchUtils);
 var _constantsActionTypes = require('../constants/ActionTypes');
 
 function login(auth, router) {
-  var json;
-  return regeneratorRuntime.async(function login$(context$1$0) {
-    while (1) switch (context$1$0.prev = context$1$0.next) {
-      case 0:
-        context$1$0.next = 2;
-        return regeneratorRuntime.awrap(fetchUtils.post('/api/login', { auth: auth }));
+  return function (dispatch) {
+    fetchUtils.post('/api/login', { auth: auth }).then(function (json) {
+      if (json.user) {
+        router.transitionTo('events');
+      }
+      dispatch({
+        type: _constantsActionTypes.LOGIN_ACTION,
+        user: json.user
+      });
+    });
+  };
+}
 
-      case 2:
-        json = context$1$0.sent;
-
-        if (json.user) {
-          router.transitionTo('events');
-        }
-
-      case 4:
-      case 'end':
-        return context$1$0.stop();
-    }
-  }, null, this);
+function logout(router) {
+  return function (dispatch) {
+    fetchUtils.post('/api/logout').then(function (json) {
+      if (json.logout) {
+        router.transitionTo('/login');
+      }
+      dispatch({
+        type: _constantsActionTypes.LOGOUT_ACTION
+      });
+    });
+  };
 }
 
 function createUser(user, router) {
-  var json;
-  return regeneratorRuntime.async(function createUser$(context$1$0) {
-    while (1) switch (context$1$0.prev = context$1$0.next) {
-      case 0:
-        context$1$0.next = 2;
-        return regeneratorRuntime.awrap(fetchUtils.post('/api/users', { user: user }));
-
-      case 2:
-        json = context$1$0.sent;
-
-        if (json.user) {
-          router.transitionTo('events');
-        }
-
-      case 4:
-      case 'end':
-        return context$1$0.stop();
-    }
-  }, null, this);
+  return function (dispatch) {
+    fetchUtils.post('/api/users', { user: user }).then(function (json) {
+      if (json.user) {
+        router.transitionTo('events');
+      }
+      dispatch({
+        type: _constantsActionTypes.CREATE_USER_ACTION,
+        user: json.user
+      });
+    });
+  };
 }
 
 function loginUser() {
@@ -27933,70 +27931,112 @@ function clear() {
 }
 
 },{"../constants/ActionTypes":322,"../utils/fetchUtils":329}],311:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _react = require("react");
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reduxReact = require('redux/react');
+
+var _actionsAuthActions = require('../actions/AuthActions');
+
+var AuthActions = _interopRequireWildcard(_actionsAuthActions);
+
 var Application = (function (_React$Component) {
   function Application(props) {
-    _classCallCheck(this, Application);
+    _classCallCheck(this, _Application);
 
-    _get(Object.getPrototypeOf(Application.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(_Application.prototype), 'constructor', this).call(this, props);
+    this.props.dispatch(AuthActions.loginUser());
   }
 
   _inherits(Application, _React$Component);
 
-  _createClass(Application, [{
-    key: "render",
+  var _Application = Application;
+
+  _createClass(_Application, [{
+    key: 'render',
     value: function render() {
-      return _react2["default"].createElement(
-        "div",
-        null,
-        _react2["default"].createElement(
-          "nav",
-          { className: "navbar navbar-default" },
-          _react2["default"].createElement(
-            "div",
-            { className: "navbar-header" },
-            _react2["default"].createElement(
-              "a",
-              { className: "navbar-brand headtitle", href: "#" },
-              "Cyan"
+      var _this = this;
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'application' },
+        _react2['default'].createElement(
+          'nav',
+          { className: 'navbar navbar-default' },
+          _react2['default'].createElement(
+            'div',
+            { className: 'navbar-header' },
+            _react2['default'].createElement(
+              'a',
+              { className: 'navbar-brand headtitle', href: '#' },
+              'Cyan'
             )
+          ),
+          _react2['default'].createElement(
+            'div',
+            { className: 'pull-right' },
+            (function () {
+              if (_this.props.auth) {
+                return _react2['default'].createElement(
+                  'button',
+                  { className: 'btn sign-out', onClick: _this.logout.bind(_this) },
+                  'Sign out'
+                );
+              }
+            })()
           )
         ),
-        _react2["default"].createElement(
-          "div",
-          { className: "container" },
+        _react2['default'].createElement(
+          'div',
+          { className: 'container' },
           this.props.children
         )
       );
     }
+  }, {
+    key: 'logout',
+    value: function logout() {
+      this.props.dispatch(AuthActions.logout(this.context.router));
+    }
+  }], [{
+    key: 'contextTypes',
+    value: {
+      router: _react.PropTypes.object.isRequired
+    },
+    enumerable: true
   }]);
 
+  Application = (0, _reduxReact.connect)(function (state) {
+    return {
+      auth: state.auth
+    };
+  })(Application) || Application;
   return Application;
-})(_react2["default"].Component);
+})(_react2['default'].Component);
 
-exports["default"] = Application;
-module.exports = exports["default"];
+exports['default'] = Application;
+module.exports = exports['default'];
 
-},{"react":282}],312:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"redux/react":305}],312:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28063,7 +28103,6 @@ var Event = (function (_React$Component) {
     dispatch(EventActions.fetchAll());
     dispatch(FeedActions.fetchAll(this.props.params.id));
     dispatch(ParticipantActions.fetchAll(this.props.params.id));
-    dispatch(AuthActions.loginUser());
   }
 
   _inherits(Event, _React$Component);
@@ -29161,8 +29200,10 @@ exports.LOGIN_ACTION = LOGIN_ACTION;
 var LOGIN_USER_ACTION = 'LOGIN_USER_ACTION';
 exports.LOGIN_USER_ACTION = LOGIN_USER_ACTION;
 var CREATE_USER_ACTION = 'CREATE_USER_ACTION';
-
 exports.CREATE_USER_ACTION = CREATE_USER_ACTION;
+var LOGOUT_ACTION = 'LOGOUT_ACTION';
+
+exports.LOGOUT_ACTION = LOGOUT_ACTION;
 var EVENT_ALL_ACTION = 'EVENT_ALL_ACTION';
 exports.EVENT_ALL_ACTION = EVENT_ALL_ACTION;
 var CREATE_EVENT_ACTION = 'CREATE_EVENT_ACTION';
@@ -29225,10 +29266,14 @@ exports['default'] = auth;
 var _constantsActionTypes = require('../constants/ActionTypes');
 
 function auth(state, action) {
+  if (state === undefined) state = null;
 
   switch (action.type) {
     case _constantsActionTypes.LOGIN_ACTION:
       return action.user;
+
+    case _constantsActionTypes.LOGOUT_ACTION:
+      return null;
 
     case _constantsActionTypes.LOGIN_USER_ACTION:
       return action.user;
