@@ -3,4 +3,5 @@ source "https://supermarket.chef.io"
 cookbook 'nodejs'
 cookbook 'database'
 cookbook 'postgresql'
+cookbook 'erlang'
 cookbook 'elixir', '= 0.8.0'

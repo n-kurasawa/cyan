@@ -1,6 +1,7 @@
 DEPENDENCIES
   database
   elixir (= 0.8.0)
+  erlang
   nodejs
   postgresql (~> 3.4.20)
 

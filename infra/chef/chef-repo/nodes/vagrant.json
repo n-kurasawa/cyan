@@ -4,17 +4,26 @@
       "postgres": "postgres"
     }
   },
+  "erlang": {
+    "source": {
+      "version": "18.0"
+    },
+    "esl": {
+      "version": "18.0"
+    }
+  },
   "nginx": {
     "do_not_cache": 1
   },
   "elixir": {
-    "version": "1.0.2"
+    "version": "1.0.4"
   },
   "automatic": {
     "ipaddress": "vagrant"
   },
   "run_list": [
     "nginx",
+    "erlang",
     "elixir",
     "postgresql",
     "postgresql::server",
