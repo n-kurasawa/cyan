@@ -30,6 +30,9 @@ defmodule Api.Router do
 
     get "/feeds/:event_id", FeedController, :index
     post "/feeds/:event_id", FeedController, :create
+
+    get "/groups", GroupController, :index
+    post "/groups", GroupController, :create
   end
 
   # scope "/api", Api do

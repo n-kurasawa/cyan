@@ -27,7 +27,6 @@ export default class Event extends React.Component {
   render() {
     let event_id = this.props.params.id;
     const { events, feeds, participants, auth, dispatch } = this.props;
-
     return (
       <div>
         <EventDetail event_id={event_id} events={events} />

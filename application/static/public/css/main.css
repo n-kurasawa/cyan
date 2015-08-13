@@ -63,53 +63,82 @@ body {
   margin-top: 10px;
   text-align: center;
 }
-.eventList {
+.eventList,
+.groupList {
   padding: 0;
 }
-.eventList .panel-body {
+.eventList .panel-body,
+.groupList .panel-body {
   padding: 0 10px 0 10px;
 }
-.eventList .eventItem .item-head {
+.eventList .eventItem .item-head,
+.groupList .eventItem .item-head,
+.eventList .groupItem .item-head,
+.groupList .groupItem .item-head {
   zoom: 1;
 }
 .eventList .eventItem .item-head:before,
-.eventList .eventItem .item-head:after {
+.groupList .eventItem .item-head:before,
+.eventList .groupItem .item-head:before,
+.groupList .groupItem .item-head:before,
+.eventList .eventItem .item-head:after,
+.groupList .eventItem .item-head:after,
+.eventList .groupItem .item-head:after,
+.groupList .groupItem .item-head:after {
   content: "";
   display: table;
 }
-.eventList .eventItem .item-head:after {
+.eventList .eventItem .item-head:after,
+.groupList .eventItem .item-head:after,
+.eventList .groupItem .item-head:after,
+.groupList .groupItem .item-head:after {
   clear: both;
 }
-.eventList .eventItem .item-head .userName {
+.eventList .eventItem .item-head .userName,
+.groupList .eventItem .item-head .userName,
+.eventList .groupItem .item-head .userName,
+.groupList .groupItem .item-head .userName {
   float: left;
   margin-right: 10px;
 }
-.eventList .eventItem .item-head .date {
+.eventList .eventItem .item-head .date,
+.groupList .eventItem .item-head .date,
+.eventList .groupItem .item-head .date,
+.groupList .groupItem .item-head .date {
   float: left;
 }
-.eventList .eventItem .title {
+.eventList .eventItem .title,
+.groupList .eventItem .title,
+.eventList .groupItem .title,
+.groupList .groupItem .title {
   margin-top: 10px;
   font-size: 16px;
   text-align: center;
 }
-.eventCreator {
+.eventCreator,
+.groupCreator {
   padding: 0;
 }
-.eventCreator .item {
+.eventCreator .item,
+.groupCreator .item {
   margin-bottom: 15px;
 }
-.eventCreator .item .item-title {
+.eventCreator .item .item-title,
+.groupCreator .item .item-title {
   margin-bottom: 5px;
   width: 70px;
 }
-.eventCreator .description textarea {
+.eventCreator .description textarea,
+.groupCreator .description textarea {
   width: 250px;
   height: 100px;
 }
-.eventCreator .item .document .item-title {
+.eventCreator .item .document .item-title,
+.groupCreator .item .document .item-title {
   margin-bottom: 10px;
 }
-.eventCreator .btn_area {
+.eventCreator .btn_area,
+.groupCreator .btn_area {
   margin-top: 15px;
   text-align: center;
 }
@@ -136,39 +165,50 @@ body {
 .participantListarea .participantList .panel-heading .people {
   float: right;
 }
-.eventDetail {
+.eventDetail,
+.groupDetail {
   padding: 0;
 }
-.eventDetail .item-head {
+.eventDetail .item-head,
+.groupDetail .item-head {
   zoom: 1;
 }
 .eventDetail .item-head:before,
-.eventDetail .item-head:after {
+.groupDetail .item-head:before,
+.eventDetail .item-head:after,
+.groupDetail .item-head:after {
   content: "";
   display: table;
 }
-.eventDetail .item-head:after {
+.eventDetail .item-head:after,
+.groupDetail .item-head:after {
   clear: both;
 }
-.eventDetail .item-head .userName {
+.eventDetail .item-head .userName,
+.groupDetail .item-head .userName {
   float: left;
   margin-right: 10px;
 }
-.eventDetail .item-head .date {
+.eventDetail .item-head .date,
+.groupDetail .item-head .date {
   float: left;
 }
-.eventDetail .title {
+.eventDetail .title,
+.groupDetail .title {
   margin-top: 10px;
   font-size: 32px;
   text-align: center;
 }
-.eventDetail .place {
+.eventDetail .place,
+.groupDetail .place {
   margin-top: 20px;
 }
-.eventDetail .item-detail {
+.eventDetail .item-detail,
+.groupDetail .item-detail {
   margin-bottom: 50px;
 }
-.eventDetail .item-detail .item-detail-head {
+.eventDetail .item-detail .item-detail-head,
+.groupDetail .item-detail .item-detail-head {
   border-bottom: 2px solid #dadada;
   font-size: 18px;
   font-weight: bold;

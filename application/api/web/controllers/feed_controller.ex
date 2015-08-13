@@ -1,13 +1,10 @@
 defmodule Api.FeedController do
   use Api.Web, :controller
-  alias Api.Event
   alias Api.User
   alias Api.Feed
 
   require Logger
   plug :scrub_params, "feed" when action in [:create, :update]
-
-  plug :action
 
   def index(conn, %{"event_id" => event_id}) do
     query = from f in Feed,

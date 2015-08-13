@@ -2,7 +2,6 @@ defmodule Api.AuthController do
   use Api.Web, :controller
   alias Api.User
   require Logger
-  plug :action
 
   def login(conn, %{"auth" => %{"account_id" => account_id, "password" => password}}) do
     query = from u in User,

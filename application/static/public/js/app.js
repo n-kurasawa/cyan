@@ -27626,6 +27626,9 @@ var Login = components.Login;
 var Signup = components.Signup;
 var Home = components.Home;
 var Event = components.Event;
+var Account = components.Account;
+var Groups = components.Groups;
+var Group = components.Group;
 
 var redux = (0, _redux.createRedux)(reducers);
 
@@ -27675,6 +27678,9 @@ function renderRoutes(history) {
       _react2['default'].createElement(_reactRouter.Route, { name: 'signup', path: '/signup', component: Signup }),
       _react2['default'].createElement(_reactRouter.Route, { name: 'events', path: '/events', component: Home, onEnter: requireAuth }),
       _react2['default'].createElement(_reactRouter.Route, { name: 'event', path: '/events/:id', component: Event, onEnter: requireAuth }),
+      _react2['default'].createElement(_reactRouter.Route, { name: 'account', path: '/account', component: Account, onEnter: requireAuth }),
+      _react2['default'].createElement(_reactRouter.Route, { name: 'groups', path: '/groups', component: Groups, onEnter: requireAuth }),
+      _react2['default'].createElement(_reactRouter.Route, { name: 'group', path: '/groups/:id', component: Group, onEnter: requireAuth }),
       _react2['default'].createElement(_reactRouter.Redirect, { from: '*', to: 'events' })
     )
   );
@@ -27704,7 +27710,7 @@ function requireAuth(nextState, transition, callback) {
 }
 module.exports = exports['default'];
 
-},{"./components":321,"./reducers":327,"./utils/fetchUtils":329,"react":282,"react-router":119,"redux":291,"redux/react":305}],307:[function(require,module,exports){
+},{"./components":329,"./reducers":336,"./utils/fetchUtils":338,"react":282,"react-router":119,"redux":291,"redux/react":305}],307:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27775,7 +27781,7 @@ function loginUser() {
   };
 }
 
-},{"../constants/ActionTypes":322,"../utils/fetchUtils":329}],308:[function(require,module,exports){
+},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],308:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27826,7 +27832,7 @@ function joinEvent(event_id) {
   };
 }
 
-},{"../constants/ActionTypes":322,"../utils/fetchUtils":329}],309:[function(require,module,exports){
+},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],309:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27872,7 +27878,58 @@ function clear() {
   };
 }
 
-},{"../constants/ActionTypes":322,"../utils/fetchUtils":329}],310:[function(require,module,exports){
+},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],310:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.fetchAll = fetchAll;
+exports.createGroup = createGroup;
+exports.inviteGroup = inviteGroup;
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+var _utilsFetchUtils = require('../utils/fetchUtils');
+
+var fetchUtils = _interopRequireWildcard(_utilsFetchUtils);
+
+var _constantsActionTypes = require('../constants/ActionTypes');
+
+function fetchAll() {
+  return function (dispatch) {
+    fetchUtils.get('/api/groups').then(function (json) {
+      dispatch({
+        type: _constantsActionTypes.GROUP_ALL_ACTION,
+        groups: json.groups
+      });
+    });
+  };
+}
+
+function createGroup(group) {
+  return function (dispatch) {
+    fetchUtils.post('/api/groups', { group: group }).then(function (json) {
+      dispatch({
+        type: _constantsActionTypes.CREATE_GROUP_ACTION,
+        group: json.group
+      });
+    });
+  };
+}
+
+function inviteGroup(group_id, user_id) {
+  return function (dispatch) {
+    fetchUtils.post('/api/group/invite', { group_id: group_id, user_id: user_id }).then(function (json) {
+      dispatch({
+        type: _constantsActionTypes.INVITE_GROUP_ACTION,
+        join: { id: json.group.id, join_user: json.join_user }
+      });
+    });
+  };
+}
+
+},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],311:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27930,7 +27987,56 @@ function clear() {
   };
 }
 
-},{"../constants/ActionTypes":322,"../utils/fetchUtils":329}],311:[function(require,module,exports){
+},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],312:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reduxReact = require("redux/react");
+
+var Account = (function (_React$Component) {
+  function Account(props) {
+    _classCallCheck(this, Account);
+
+    _get(Object.getPrototypeOf(Account.prototype), "constructor", this).call(this, props);
+  }
+
+  _inherits(Account, _React$Component);
+
+  _createClass(Account, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "Account" },
+        "アカウント"
+      );
+    }
+  }]);
+
+  return Account;
+})(_react2["default"].Component);
+
+exports["default"] = Account;
+module.exports = exports["default"];
+
+},{"react":282,"redux/react":305}],313:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27959,6 +28065,8 @@ var _actionsAuthActions = require('../actions/AuthActions');
 
 var AuthActions = _interopRequireWildcard(_actionsAuthActions);
 
+var _reactRouter = require('react-router');
+
 var Application = (function (_React$Component) {
   function Application(props) {
     _classCallCheck(this, _Application);
@@ -27984,22 +28092,52 @@ var Application = (function (_React$Component) {
           { className: 'navbar navbar-default' },
           _react2['default'].createElement(
             'div',
-            { className: 'navbar-header' },
+            { className: 'container-fluid' },
             _react2['default'].createElement(
-              'a',
-              { className: 'navbar-brand headtitle', href: '#' },
-              'Cyan'
-            )
-          ),
-          _react2['default'].createElement(
-            'div',
-            { className: 'pull-right' },
+              'div',
+              { className: 'navbar-header' },
+              _react2['default'].createElement(
+                _reactRouter.Link,
+                { className: 'navbar-brand headtitle', to: '/events' },
+                'Cyan'
+              )
+            ),
             (function () {
               if (_this.props.auth) {
                 return _react2['default'].createElement(
-                  'button',
-                  { className: 'btn sign-out', onClick: _this.logout.bind(_this) },
-                  'Sign out'
+                  'div',
+                  { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+                  _react2['default'].createElement(
+                    'ul',
+                    { className: 'nav navbar-nav navbar-right' },
+                    _react2['default'].createElement(
+                      'li',
+                      null,
+                      _react2['default'].createElement(
+                        _reactRouter.Link,
+                        { to: '/account' },
+                        'アカウント管理'
+                      )
+                    ),
+                    _react2['default'].createElement(
+                      'li',
+                      null,
+                      _react2['default'].createElement(
+                        _reactRouter.Link,
+                        { to: '/groups' },
+                        'グループ管理'
+                      )
+                    ),
+                    _react2['default'].createElement(
+                      'li',
+                      null,
+                      _react2['default'].createElement(
+                        'a',
+                        { href: 'signout', onClick: _this.logout.bind(_this) },
+                        'Sign out'
+                      )
+                    )
+                  )
                 );
               }
             })()
@@ -28014,7 +28152,8 @@ var Application = (function (_React$Component) {
     }
   }, {
     key: 'logout',
-    value: function logout() {
+    value: function logout(e) {
+      e.preventDefault();
       this.props.dispatch(AuthActions.logout(this.context.router));
     }
   }], [{
@@ -28036,7 +28175,7 @@ var Application = (function (_React$Component) {
 exports['default'] = Application;
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"react":282,"redux/react":305}],312:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],314:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28145,7 +28284,7 @@ var Event = (function (_React$Component) {
 exports['default'] = Event;
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"../actions/EventActions":308,"../actions/FeedActions":309,"../actions/ParticipantActions":310,"./EventDetail.jsx":314,"./Feed.jsx":316,"./ParticipantList.jsx":319,"react":282,"redux":291,"redux/react":305}],313:[function(require,module,exports){
+},{"../actions/AuthActions":307,"../actions/EventActions":308,"../actions/FeedActions":309,"../actions/ParticipantActions":311,"./EventDetail.jsx":316,"./Feed.jsx":318,"./ParticipantList.jsx":327,"react":282,"redux":291,"redux/react":305}],315:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28311,7 +28450,7 @@ exports["default"] = EventCreator;
 EventCreator.defaultProps = { title: "", date: "", max: "", place: "", description: "", document: "" };
 module.exports = exports["default"];
 
-},{"react":282}],314:[function(require,module,exports){
+},{"react":282}],316:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28424,7 +28563,7 @@ var EventDetail = (function (_React$Component) {
 exports["default"] = EventDetail;
 module.exports = exports["default"];
 
-},{"react":282}],315:[function(require,module,exports){
+},{"react":282}],317:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28538,7 +28677,7 @@ var EventItem = (function (_React$Component2) {
 
 module.exports = exports["default"];
 
-},{"react":282,"react-router":119}],316:[function(require,module,exports){
+},{"react":282,"react-router":119}],318:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28672,7 +28811,557 @@ var FeedItem = (function (_React$Component2) {
 
 module.exports = exports["default"];
 
-},{"react":282}],317:[function(require,module,exports){
+},{"react":282}],319:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reduxReact = require('redux/react');
+
+var _redux = require('redux');
+
+var _actionsGroupActions = require('../actions/GroupActions');
+
+var GroupActions = _interopRequireWildcard(_actionsGroupActions);
+
+var _GroupDetailJsx = require('./GroupDetail.jsx');
+
+var _GroupDetailJsx2 = _interopRequireDefault(_GroupDetailJsx);
+
+var _GroupMemberJsx = require('./GroupMember.jsx');
+
+var _GroupMemberJsx2 = _interopRequireDefault(_GroupMemberJsx);
+
+var Group = (function (_React$Component) {
+  function Group(props) {
+    _classCallCheck(this, _Group);
+
+    _get(Object.getPrototypeOf(_Group.prototype), 'constructor', this).call(this, props);
+    var dispatch = this.props.dispatch;
+
+    dispatch(GroupActions.fetchAll());
+  }
+
+  _inherits(Group, _React$Component);
+
+  var _Group = Group;
+
+  _createClass(_Group, [{
+    key: 'render',
+    value: function render() {
+      var group_id = this.props.params.id;
+      var _props = this.props;
+      var groups = _props.groups;
+      var dispatch = _props.dispatch;
+
+      return _react2['default'].createElement(
+        'div',
+        null,
+        _react2['default'].createElement(_GroupDetailJsx2['default'], { group_id: group_id, groups: groups }),
+        _react2['default'].createElement('div', { className: 'col-md-1' }),
+        _react2['default'].createElement(_GroupMemberJsx2['default'], _extends({ group_id: group_id, groups: groups }, (0, _redux.bindActionCreators)(GroupActions, dispatch)))
+      );
+    }
+  }]);
+
+  Group = (0, _reduxReact.connect)(function (state) {
+    return {
+      groups: state.groups
+    };
+  })(Group) || Group;
+  return Group;
+})(_react2['default'].Component);
+
+exports['default'] = Group;
+module.exports = exports['default'];
+
+},{"../actions/GroupActions":310,"./GroupDetail.jsx":321,"./GroupMember.jsx":323,"react":282,"redux":291,"redux/react":305}],320:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var GroupCreator = (function (_React$Component) {
+  function GroupCreator(props) {
+    _classCallCheck(this, GroupCreator);
+
+    _get(Object.getPrototypeOf(GroupCreator.prototype), "constructor", this).call(this, props);
+    this.state = {
+      name: props.name,
+      description: props.title
+    };
+  }
+
+  _inherits(GroupCreator, _React$Component);
+
+  _createClass(GroupCreator, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "groupCreator panel panel-default col-md-4" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          "グループ作成"
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement(
+            "div",
+            { className: "item name" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "グループ名"
+            ),
+            _react2["default"].createElement("input", { type: "text", value: this.state.name, onChange: this.handelChangeName.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "item description" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-title" },
+              "詳細"
+            ),
+            _react2["default"].createElement("textarea", { value: this.state.description, onChange: this.handelChangeDescription.bind(this) })
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "btn_area" },
+            _react2["default"].createElement(
+              "button",
+              { className: "btn btn-default", onClick: this.handleSubmit.bind(this) },
+              "作成"
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      var group = {
+        name: this.state.name,
+        description: this.state.description
+      };
+      this.props.createGroup(group);
+      this.setState({ name: "", description: "" });
+    }
+  }, {
+    key: "handelChangeName",
+    value: function handelChangeName(e) {
+      this.setState({ name: e.target.value });
+    }
+  }, {
+    key: "handelChangeDescription",
+    value: function handelChangeDescription(e) {
+      this.setState({ description: e.target.value });
+    }
+  }]);
+
+  return GroupCreator;
+})(_react2["default"].Component);
+
+exports["default"] = GroupCreator;
+
+GroupCreator.defaultProps = { name: "", description: "" };
+module.exports = exports["default"];
+
+},{"react":282}],321:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var GroupDetail = (function (_React$Component) {
+  function GroupDetail(props) {
+    _classCallCheck(this, GroupDetail);
+
+    _get(Object.getPrototypeOf(GroupDetail.prototype), "constructor", this).call(this, props);
+  }
+
+  _inherits(GroupDetail, _React$Component);
+
+  _createClass(GroupDetail, [{
+    key: "render",
+    value: function render() {
+      var group = this.findEvent(this.props.group_id);
+      if (group) {
+        var name = group.name;
+        var owner = group.owner.name;
+        var description = group.description;
+      }
+
+      return _react2["default"].createElement(
+        "div",
+        { className: "groupDetail panel panel-default col-md-7" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          _react2["default"].createElement(
+            "div",
+            { className: "item-head" },
+            _react2["default"].createElement(
+              "div",
+              { className: "userName" },
+              "オーナー: ",
+              owner
+            )
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "title" },
+            name
+          )
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement(
+            "div",
+            { className: "item-detail description" },
+            _react2["default"].createElement(
+              "div",
+              { className: "item-detail-head" },
+              "詳細"
+            ),
+            description
+          )
+        )
+      );
+    }
+  }, {
+    key: "findEvent",
+    value: function findEvent(id) {
+      var groups = this.props.groups.filter(function (group) {
+        return group.id === +id;
+      });
+      return groups[0];
+    }
+  }]);
+
+  return GroupDetail;
+})(_react2["default"].Component);
+
+exports["default"] = GroupDetail;
+module.exports = exports["default"];
+
+},{"react":282}],322:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require("react-router");
+
+var GroupList = (function (_React$Component) {
+  function GroupList(props) {
+    _classCallCheck(this, GroupList);
+
+    _get(Object.getPrototypeOf(GroupList.prototype), "constructor", this).call(this, props);
+    this.props.fetchAll();
+  }
+
+  _inherits(GroupList, _React$Component);
+
+  _createClass(GroupList, [{
+    key: "render",
+    value: function render() {
+      var groups = this.props.groups;
+
+      var items = [];
+      groups.forEach(function (group) {
+        items.push(_react2["default"].createElement(GroupItem, { key: group.id, group: group }));
+      });
+
+      return _react2["default"].createElement(
+        "div",
+        { className: "groupList panel panel-default col-md-7" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          "グループ"
+        ),
+        _react2["default"].createElement(
+          "ul",
+          { className: "list-group panel-body" },
+          items
+        )
+      );
+    }
+  }]);
+
+  return GroupList;
+})(_react2["default"].Component);
+
+exports["default"] = GroupList;
+
+var GroupItem = (function (_React$Component2) {
+  function GroupItem(props) {
+    _classCallCheck(this, GroupItem);
+
+    _get(Object.getPrototypeOf(GroupItem.prototype), "constructor", this).call(this, props);
+  }
+
+  _inherits(GroupItem, _React$Component2);
+
+  _createClass(GroupItem, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "li",
+        { className: "groupItem list-group-item" },
+        _react2["default"].createElement(
+          "div",
+          { className: "item-head" },
+          _react2["default"].createElement(
+            "div",
+            { className: "userName" },
+            "オーナー: ",
+            this.props.group.owner.name,
+            " "
+          )
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "title" },
+          _react2["default"].createElement(
+            _reactRouter.Link,
+            { to: "/groups/" + this.props.group.id },
+            this.props.group.name
+          )
+        )
+      );
+    }
+  }]);
+
+  return GroupItem;
+})(_react2["default"].Component);
+
+module.exports = exports["default"];
+
+},{"react":282,"react-router":119}],323:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require("react-router");
+
+var GroupMember = (function (_React$Component) {
+  function GroupMember(props) {
+    _classCallCheck(this, GroupMember);
+
+    _get(Object.getPrototypeOf(GroupMember.prototype), "constructor", this).call(this, props);
+  }
+
+  _inherits(GroupMember, _React$Component);
+
+  _createClass(GroupMember, [{
+    key: "render",
+    value: function render() {
+
+      return _react2["default"].createElement(
+        "div",
+        { className: "groupMember col-md-4" },
+        _react2["default"].createElement(Member, null)
+      );
+    }
+  }]);
+
+  return GroupMember;
+})(_react2["default"].Component);
+
+exports["default"] = GroupMember;
+
+var Member = (function (_React$Component2) {
+  function Member() {
+    _classCallCheck(this, Member);
+
+    _get(Object.getPrototypeOf(Member.prototype), "constructor", this).call(this);
+  }
+
+  _inherits(Member, _React$Component2);
+
+  _createClass(Member, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement("li", { className: "list-group-item member" });
+    }
+  }]);
+
+  return Member;
+})(_react2["default"].Component);
+
+module.exports = exports["default"];
+
+},{"react":282,"react-router":119}],324:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reduxReact = require('redux/react');
+
+var _redux = require('redux');
+
+var _GroupListJsx = require('./GroupList.jsx');
+
+var _GroupListJsx2 = _interopRequireDefault(_GroupListJsx);
+
+var _GroupCreatorJsx = require('./GroupCreator.jsx');
+
+var _GroupCreatorJsx2 = _interopRequireDefault(_GroupCreatorJsx);
+
+var _actionsGroupActions = require('../actions/GroupActions');
+
+var GroupActions = _interopRequireWildcard(_actionsGroupActions);
+
+var Groups = (function (_React$Component) {
+  function Groups(props) {
+    _classCallCheck(this, _Groups);
+
+    _get(Object.getPrototypeOf(_Groups.prototype), 'constructor', this).call(this, props);
+  }
+
+  _inherits(Groups, _React$Component);
+
+  var _Groups = Groups;
+
+  _createClass(_Groups, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props;
+      var groups = _props.groups;
+      var events = _props.events;
+      var dispatch = _props.dispatch;
+
+      var actions = (0, _redux.bindActionCreators)(GroupActions, dispatch);
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'group' },
+        _react2['default'].createElement(_GroupListJsx2['default'], _extends({ groups: groups }, actions)),
+        _react2['default'].createElement('div', { className: 'col-md-1' }),
+        _react2['default'].createElement(_GroupCreatorJsx2['default'], actions)
+      );
+    }
+  }]);
+
+  Groups = (0, _reduxReact.connect)(function (state) {
+    return {
+      groups: state.groups
+    };
+  })(Groups) || Groups;
+  return Groups;
+})(_react2['default'].Component);
+
+exports['default'] = Groups;
+module.exports = exports['default'];
+
+},{"../actions/GroupActions":310,"./GroupCreator.jsx":320,"./GroupList.jsx":322,"react":282,"redux":291,"redux/react":305}],325:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28754,7 +29443,7 @@ var Home = (function (_React$Component) {
 exports['default'] = Home;
 module.exports = exports['default'];
 
-},{"../actions/EventActions":308,"./EventCreator.jsx":313,"./EventList.jsx":315,"react":282,"redux":291,"redux/react":305}],318:[function(require,module,exports){
+},{"../actions/EventActions":308,"./EventCreator.jsx":315,"./EventList.jsx":317,"react":282,"redux":291,"redux/react":305}],326:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -28869,7 +29558,7 @@ exports['default'] = Login;
 Login.defaultProps = { account_id: '', password: '' };
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],319:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],327:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29020,7 +29709,7 @@ var Participant = (function (_React$Component2) {
 
 module.exports = exports["default"];
 
-},{"react":282,"react-router":119}],320:[function(require,module,exports){
+},{"react":282,"react-router":119}],328:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29160,7 +29849,7 @@ exports['default'] = Signup;
 Signup.defaultProps = { account_id: '', password: '', email: '', name: '' };
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],321:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],329:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29189,7 +29878,19 @@ var _Event = require('./Event');
 
 exports.Event = _interopRequire(_Event);
 
-},{"./Application":311,"./Event":312,"./Home":317,"./Login":318,"./Signup":320}],322:[function(require,module,exports){
+var _Account = require('./Account');
+
+exports.Account = _interopRequire(_Account);
+
+var _Groups = require('./Groups');
+
+exports.Groups = _interopRequire(_Groups);
+
+var _Group = require('./Group');
+
+exports.Group = _interopRequire(_Group);
+
+},{"./Account":312,"./Application":313,"./Event":314,"./Group":319,"./Groups":324,"./Home":325,"./Login":326,"./Signup":328}],330:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29225,9 +29926,16 @@ exports.PARTICIPANT_CANCEL_EVENT_ACTION = PARTICIPANT_CANCEL_EVENT_ACTION;
 var PARTICIPANT_JOIN_EVENT_ACTION = 'PARTICIPANT_JOIN_EVENT_ACTION';
 exports.PARTICIPANT_JOIN_EVENT_ACTION = PARTICIPANT_JOIN_EVENT_ACTION;
 var PARTICIPANT_CLEAR_ACTION = 'PARTICIPANT_CLEAR_ACTION';
-exports.PARTICIPANT_CLEAR_ACTION = PARTICIPANT_CLEAR_ACTION;
 
-},{}],323:[function(require,module,exports){
+exports.PARTICIPANT_CLEAR_ACTION = PARTICIPANT_CLEAR_ACTION;
+var GROUP_ALL_ACTION = 'GROUP_ALL_ACTION';
+exports.GROUP_ALL_ACTION = GROUP_ALL_ACTION;
+var CREATE_GROUP_ACTION = 'CREATE_GROUP_ACTION';
+exports.CREATE_GROUP_ACTION = CREATE_GROUP_ACTION;
+var INVITE_GROUP_ACTION = 'INVITE_GROUP_ACTION';
+exports.INVITE_GROUP_ACTION = INVITE_GROUP_ACTION;
+
+},{}],331:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -29255,7 +29963,7 @@ var history = new _reactRouterLibBrowserHistory2['default']();
 
 _react2['default'].render(_react2['default'].createElement(_Root2['default'], { history: history }), document.getElementById('app'));
 
-},{"./Root":306,"babel/polyfill":93,"react":282,"react-router/lib/BrowserHistory":98,"react-router/lib/HashHistory":101}],324:[function(require,module,exports){
+},{"./Root":306,"babel/polyfill":93,"react":282,"react-router/lib/BrowserHistory":98,"react-router/lib/HashHistory":101}],332:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29287,7 +29995,7 @@ function auth(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":322}],325:[function(require,module,exports){
+},{"../constants/ActionTypes":330}],333:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29329,7 +30037,7 @@ function events(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":322}],326:[function(require,module,exports){
+},{"../constants/ActionTypes":330}],334:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29363,7 +30071,40 @@ function feeds(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":322}],327:[function(require,module,exports){
+},{"../constants/ActionTypes":330}],335:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = groups;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var _constantsActionTypes = require('../constants/ActionTypes');
+
+function groups(state, action) {
+  if (state === undefined) state = [];
+
+  switch (action.type) {
+    case _constantsActionTypes.GROUP_ALL_ACTION:
+      return action.groups;
+
+    case _constantsActionTypes.CREATE_GROUP_ACTION:
+      return [action.group].concat(_toConsumableArray(state));
+
+    case _constantsActionTypes.INVITE_GROUP_ACTION:
+
+      return state;
+
+    default:
+      return state;
+  }
+}
+
+module.exports = exports['default'];
+
+},{"../constants/ActionTypes":330}],336:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29388,7 +30129,11 @@ var _participants = require('./participants');
 
 exports.participants = _interopRequire(_participants);
 
-},{"./auth":324,"./events":325,"./feeds":326,"./participants":328}],328:[function(require,module,exports){
+var _groups = require('./groups');
+
+exports.groups = _interopRequire(_groups);
+
+},{"./auth":332,"./events":333,"./feeds":334,"./groups":335,"./participants":337}],337:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29426,7 +30171,7 @@ function participants(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":322}],329:[function(require,module,exports){
+},{"../constants/ActionTypes":330}],338:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29504,4 +30249,4 @@ function post(url, body) {
   }, null, this);
 }
 
-},{"isomorphic-fetch":96}]},{},[323]);
+},{"isomorphic-fetch":96}]},{},[331]);

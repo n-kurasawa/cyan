@@ -7,8 +7,6 @@ defmodule Api.EventController do
   require Logger
   plug :scrub_params, "event" when action in [:create, :update]
 
-  plug :action
-
   def index(conn, _params) do
     events = Event |> Repo.all() |> Repo.preload [:user]
     render conn, events: events
@@ -44,12 +42,10 @@ defmodule Api.EventController do
     user = get_session(conn, :user)
     changeset = EventUser.changeset(%EventUser{}, %{event_id: event_id, user_id: user.id})
     if changeset.valid? do
-      eventUser = Repo.insert(changeset)
+      Repo.insert(changeset)
 
       conn
       |> put_flash(:info, "EventUser created successfully.")
-
-      event = Event |> Repo.get(event_id) |> Repo.preload [:user]
 
       render conn, user: user
     else

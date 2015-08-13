@@ -2,7 +2,6 @@ defmodule Api.UserController do
   use Api.Web, :controller
   alias Api.User
   require Logger
-  plug :action
 
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(%User{}, user_params)

@@ -6,7 +6,7 @@ import * as fetchUtils from './utils/fetchUtils';
 import * as components from './components'
 import * as reducers from './reducers';
 
-const { Application, Login, Signup, Home, Event } = components;
+const { Application, Login, Signup, Home, Event, Account, Groups, Group } = components;
 
 const redux = createRedux(reducers);
 
@@ -33,6 +33,9 @@ function renderRoutes(history) {
         <Route name="signup" path="/signup" component={Signup}/>
         <Route name="events" path="/events" component={Home} onEnter={requireAuth}/>
         <Route name="event" path="/events/:id" component={Event} onEnter={requireAuth}/>
+        <Route name="account" path="/account" component={Account} onEnter={requireAuth}/>
+        <Route name="groups" path="/groups" component={Groups} onEnter={requireAuth}/>
+        <Route name="group" path="/groups/:id" component={Group} onEnter={requireAuth}/>
         <Redirect from="*" to="events" />
       </Route>
     </Router>

@@ -32,5 +32,5 @@ defmodule Api.Endpoint do
     key: "_api_key",
     signing_salt: "Ita/zdKV"
 
-  plug :router, Api.Router
+  plug Api.Router
 end

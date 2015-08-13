@@ -9,7 +9,11 @@ defmodule Api.User do
     field :email, :string
 
     has_many :events, Api.Event
+
     has_many :event_user, Api.EventUser
+
+    has_many :group_user, Api.GroupUser
+    has_many :groups, through: [:group_user, :groups]
 
     timestamps
   end
