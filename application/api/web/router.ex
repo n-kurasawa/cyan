@@ -33,6 +33,7 @@ defmodule Api.Router do
 
     get "/groups", GroupController, :index
     post "/groups", GroupController, :create
+    post "/group/invite/:group_id", GroupController, :invite
   end
 
   # scope "/api", Api do

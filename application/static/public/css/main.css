@@ -165,6 +165,23 @@ body {
 .participantListarea .participantList .panel-heading .people {
   float: right;
 }
+.groupMemberList {
+  padding: 0;
+}
+.groupMemberList .panel-heading {
+  zoom: 1;
+}
+.groupMemberList .panel-heading:before,
+.groupMemberList .panel-heading:after {
+  content: "";
+  display: table;
+}
+.groupMemberList .panel-heading:after {
+  clear: both;
+}
+.groupMemberList .panel-heading .people {
+  float: right;
+}
 .eventDetail,
 .groupDetail {
   padding: 0;
@@ -234,4 +251,11 @@ body {
 .feed .feedItem div .date {
   color: #808080;
   font-size: 13px;
+}
+.invitation input {
+  width: 100%;
+}
+.invitation .btn_area {
+  margin-top: 15px;
+  text-align: center;
 }

@@ -3,7 +3,7 @@ import { connect } from 'redux/react';
 import { bindActionCreators } from 'redux';
 import * as GroupActions from '../actions/GroupActions';
 import GroupDetail from './GroupDetail.jsx'
-import GroupMember from './GroupMember.jsx'
+import GroupMemberList from './GroupMemberList.jsx'
 
 @connect(state => ({
   groups: state.groups
@@ -17,13 +17,21 @@ export default class Group extends React.Component {
 
   render() {
     let group_id = this.props.params.id;
-    const { groups, dispatch } = this.props;
+    const { dispatch } = this.props;
+    let group = this.findById(group_id);
+
     return (
       <div>
-        <GroupDetail group_id={group_id} groups={groups} />
+        <GroupDetail group={group} />
         <div className="col-md-1"></div>
-        <GroupMember group_id={group_id} groups={groups} {...bindActionCreators(GroupActions, dispatch)}/>
+        <GroupMemberList group={group} {...bindActionCreators(GroupActions, dispatch)}/>
       </div>
     );
+  }
+
+  findById(group_id) {
+    return this.props.groups.find((group)=>{
+      return group.id === +group_id;
+    });
   }
 }

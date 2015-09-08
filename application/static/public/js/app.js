@@ -27710,7 +27710,7 @@ function requireAuth(nextState, transition, callback) {
 }
 module.exports = exports['default'];
 
-},{"./components":329,"./reducers":336,"./utils/fetchUtils":338,"react":282,"react-router":119,"redux":291,"redux/react":305}],307:[function(require,module,exports){
+},{"./components":330,"./reducers":337,"./utils/fetchUtils":339,"react":282,"react-router":119,"redux":291,"redux/react":305}],307:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27781,7 +27781,7 @@ function loginUser() {
   };
 }
 
-},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],308:[function(require,module,exports){
+},{"../constants/ActionTypes":331,"../utils/fetchUtils":339}],308:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27832,7 +27832,7 @@ function joinEvent(event_id) {
   };
 }
 
-},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],309:[function(require,module,exports){
+},{"../constants/ActionTypes":331,"../utils/fetchUtils":339}],309:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27878,7 +27878,7 @@ function clear() {
   };
 }
 
-},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],310:[function(require,module,exports){
+},{"../constants/ActionTypes":331,"../utils/fetchUtils":339}],310:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27918,18 +27918,18 @@ function createGroup(group) {
   };
 }
 
-function inviteGroup(group_id, user_id) {
+function inviteGroup(group_id, email) {
   return function (dispatch) {
-    fetchUtils.post('/api/group/invite', { group_id: group_id, user_id: user_id }).then(function (json) {
+    fetchUtils.post('/api/group/invite/' + group_id, { email: email }).then(function (json) {
       dispatch({
         type: _constantsActionTypes.INVITE_GROUP_ACTION,
-        join: { id: json.group.id, join_user: json.join_user }
+        join: { id: json.group_id }
       });
     });
   };
 }
 
-},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],311:[function(require,module,exports){
+},{"../constants/ActionTypes":331,"../utils/fetchUtils":339}],311:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -27987,7 +27987,7 @@ function clear() {
   };
 }
 
-},{"../constants/ActionTypes":330,"../utils/fetchUtils":338}],312:[function(require,module,exports){
+},{"../constants/ActionTypes":331,"../utils/fetchUtils":339}],312:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28284,7 +28284,7 @@ var Event = (function (_React$Component) {
 exports['default'] = Event;
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"../actions/EventActions":308,"../actions/FeedActions":309,"../actions/ParticipantActions":311,"./EventDetail.jsx":316,"./Feed.jsx":318,"./ParticipantList.jsx":327,"react":282,"redux":291,"redux/react":305}],315:[function(require,module,exports){
+},{"../actions/AuthActions":307,"../actions/EventActions":308,"../actions/FeedActions":309,"../actions/ParticipantActions":311,"./EventDetail.jsx":316,"./Feed.jsx":318,"./ParticipantList.jsx":328,"react":282,"redux":291,"redux/react":305}],315:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28848,9 +28848,9 @@ var _GroupDetailJsx = require('./GroupDetail.jsx');
 
 var _GroupDetailJsx2 = _interopRequireDefault(_GroupDetailJsx);
 
-var _GroupMemberJsx = require('./GroupMember.jsx');
+var _GroupMemberListJsx = require('./GroupMemberList.jsx');
 
-var _GroupMemberJsx2 = _interopRequireDefault(_GroupMemberJsx);
+var _GroupMemberListJsx2 = _interopRequireDefault(_GroupMemberListJsx);
 
 var Group = (function (_React$Component) {
   function Group(props) {
@@ -28870,17 +28870,24 @@ var Group = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var group_id = this.props.params.id;
-      var _props = this.props;
-      var groups = _props.groups;
-      var dispatch = _props.dispatch;
+      var dispatch = this.props.dispatch;
+
+      var group = this.findById(group_id);
 
       return _react2['default'].createElement(
         'div',
         null,
-        _react2['default'].createElement(_GroupDetailJsx2['default'], { group_id: group_id, groups: groups }),
+        _react2['default'].createElement(_GroupDetailJsx2['default'], { group: group }),
         _react2['default'].createElement('div', { className: 'col-md-1' }),
-        _react2['default'].createElement(_GroupMemberJsx2['default'], _extends({ group_id: group_id, groups: groups }, (0, _redux.bindActionCreators)(GroupActions, dispatch)))
+        _react2['default'].createElement(_GroupMemberListJsx2['default'], _extends({ group: group }, (0, _redux.bindActionCreators)(GroupActions, dispatch)))
       );
+    }
+  }, {
+    key: 'findById',
+    value: function findById(group_id) {
+      return this.props.groups.find(function (group) {
+        return group.id === +group_id;
+      });
     }
   }]);
 
@@ -28895,7 +28902,7 @@ var Group = (function (_React$Component) {
 exports['default'] = Group;
 module.exports = exports['default'];
 
-},{"../actions/GroupActions":310,"./GroupDetail.jsx":321,"./GroupMember.jsx":323,"react":282,"redux":291,"redux/react":305}],320:[function(require,module,exports){
+},{"../actions/GroupActions":310,"./GroupDetail.jsx":321,"./GroupMemberList.jsx":323,"react":282,"redux":291,"redux/react":305}],320:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29038,7 +29045,7 @@ var GroupDetail = (function (_React$Component) {
   _createClass(GroupDetail, [{
     key: "render",
     value: function render() {
-      var group = this.findEvent(this.props.group_id);
+      var group = this.props.group;
       if (group) {
         var name = group.name;
         var owner = group.owner.name;
@@ -29083,14 +29090,6 @@ var GroupDetail = (function (_React$Component) {
         )
       );
     }
-  }, {
-    key: "findEvent",
-    value: function findEvent(id) {
-      var groups = this.props.groups.filter(function (group) {
-        return group.id === +id;
-      });
-      return groups[0];
-    }
   }]);
 
   return GroupDetail;
@@ -29127,7 +29126,6 @@ var GroupList = (function (_React$Component) {
     _classCallCheck(this, GroupList);
 
     _get(Object.getPrototypeOf(GroupList.prototype), "constructor", this).call(this, props);
-    this.props.fetchAll();
   }
 
   _inherits(GroupList, _React$Component);
@@ -29209,83 +29207,121 @@ var GroupItem = (function (_React$Component2) {
 module.exports = exports["default"];
 
 },{"react":282,"react-router":119}],323:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var _react = require("react");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = require("react-router");
-
-var GroupMember = (function (_React$Component) {
-  function GroupMember(props) {
-    _classCallCheck(this, GroupMember);
-
-    _get(Object.getPrototypeOf(GroupMember.prototype), "constructor", this).call(this, props);
-  }
-
-  _inherits(GroupMember, _React$Component);
-
-  _createClass(GroupMember, [{
-    key: "render",
-    value: function render() {
-
-      return _react2["default"].createElement(
-        "div",
-        { className: "groupMember col-md-4" },
-        _react2["default"].createElement(Member, null)
-      );
-    }
-  }]);
-
-  return GroupMember;
-})(_react2["default"].Component);
-
-exports["default"] = GroupMember;
-
-var Member = (function (_React$Component2) {
-  function Member() {
-    _classCallCheck(this, Member);
-
-    _get(Object.getPrototypeOf(Member.prototype), "constructor", this).call(this);
-  }
-
-  _inherits(Member, _React$Component2);
-
-  _createClass(Member, [{
-    key: "render",
-    value: function render() {
-      return _react2["default"].createElement("li", { className: "list-group-item member" });
-    }
-  }]);
-
-  return Member;
-})(_react2["default"].Component);
-
-module.exports = exports["default"];
-
-},{"react":282,"react-router":119}],324:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _InvitationJsx = require('./Invitation.jsx');
+
+var _InvitationJsx2 = _interopRequireDefault(_InvitationJsx);
+
+var GroupMemberList = (function (_React$Component) {
+  function GroupMemberList(props) {
+    _classCallCheck(this, GroupMemberList);
+
+    _get(Object.getPrototypeOf(GroupMemberList.prototype), 'constructor', this).call(this, props);
+  }
+
+  _inherits(GroupMemberList, _React$Component);
+
+  _createClass(GroupMemberList, [{
+    key: 'render',
+    value: function render() {
+      var group = this.props.group;
+
+      var members = [];
+      if (group) {
+        group.users.forEach(function (user) {
+          members.push(_react2['default'].createElement(GroupMember, { key: user.id, user: user }));
+        });
+      }
+
+      return _react2['default'].createElement(
+        'div',
+        { className: 'col-md-4' },
+        _react2['default'].createElement(_InvitationJsx2['default'], { group: group, inviteGroup: this.props.inviteGroup }),
+        _react2['default'].createElement(
+          'div',
+          { className: 'groupMemberList panel panel-default' },
+          _react2['default'].createElement(
+            'div',
+            { className: 'panel-heading' },
+            _react2['default'].createElement(
+              'div',
+              { className: 'people' },
+              members.length,
+              ' 人'
+            ),
+            _react2['default'].createElement(
+              'div',
+              { className: 'title' },
+              'グループメンバー'
+            )
+          ),
+          _react2['default'].createElement(
+            'ul',
+            { className: 'list-group panel-body' },
+            members
+          )
+        )
+      );
+    }
+  }]);
+
+  return GroupMemberList;
+})(_react2['default'].Component);
+
+exports['default'] = GroupMemberList;
+
+var GroupMember = (function (_React$Component2) {
+  function GroupMember() {
+    _classCallCheck(this, GroupMember);
+
+    _get(Object.getPrototypeOf(GroupMember.prototype), 'constructor', this).call(this);
+  }
+
+  _inherits(GroupMember, _React$Component2);
+
+  _createClass(GroupMember, [{
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'li',
+        { className: 'list-group-item groupMember' },
+        this.props.user.name
+      );
+    }
+  }]);
+
+  return GroupMember;
+})(_react2['default'].Component);
+
+module.exports = exports['default'];
+
+},{"./Invitation.jsx":326,"react":282,"react-router":119}],324:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -29324,6 +29360,9 @@ var Groups = (function (_React$Component) {
     _classCallCheck(this, _Groups);
 
     _get(Object.getPrototypeOf(_Groups.prototype), 'constructor', this).call(this, props);
+    var dispatch = this.props.dispatch;
+
+    dispatch(GroupActions.fetchAll());
   }
 
   _inherits(Groups, _React$Component);
@@ -29335,17 +29374,14 @@ var Groups = (function (_React$Component) {
     value: function render() {
       var _props = this.props;
       var groups = _props.groups;
-      var events = _props.events;
       var dispatch = _props.dispatch;
-
-      var actions = (0, _redux.bindActionCreators)(GroupActions, dispatch);
 
       return _react2['default'].createElement(
         'div',
         { className: 'group' },
-        _react2['default'].createElement(_GroupListJsx2['default'], _extends({ groups: groups }, actions)),
+        _react2['default'].createElement(_GroupListJsx2['default'], { groups: groups }),
         _react2['default'].createElement('div', { className: 'col-md-1' }),
-        _react2['default'].createElement(_GroupCreatorJsx2['default'], actions)
+        _react2['default'].createElement(_GroupCreatorJsx2['default'], (0, _redux.bindActionCreators)(GroupActions, dispatch))
       );
     }
   }]);
@@ -29444,6 +29480,90 @@ exports['default'] = Home;
 module.exports = exports['default'];
 
 },{"../actions/EventActions":308,"./EventCreator.jsx":315,"./EventList.jsx":317,"react":282,"redux":291,"redux/react":305}],326:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+// import { bindActionCreators } from 'redux';
+// import { connect } from 'redux/react';
+
+var Invitation = (function (_React$Component) {
+  function Invitation(props) {
+    _classCallCheck(this, Invitation);
+
+    _get(Object.getPrototypeOf(Invitation.prototype), "constructor", this).call(this, props);
+    this.state = {
+      email: props.email
+    };
+  }
+
+  _inherits(Invitation, _React$Component);
+
+  _createClass(Invitation, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "invitation panel panel-default" },
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-heading" },
+          "グループへ招待"
+        ),
+        _react2["default"].createElement(
+          "div",
+          { className: "panel-body" },
+          _react2["default"].createElement("input", { type: "text", value: this.state.email, onChange: this.handleChangeEmail.bind(this), placeholder: "Emailアドレス" }),
+          _react2["default"].createElement(
+            "div",
+            { className: "btn_area" },
+            _react2["default"].createElement(
+              "button",
+              { className: "btn btn-default", onClick: this.handleSubmit.bind(this) },
+              "招待する"
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      this.props.inviteGroup(this.props.group.id, this.state.email);
+      this.setState({ email: "" });
+    }
+  }, {
+    key: "handleChangeEmail",
+    value: function handleChangeEmail(e) {
+      this.setState({ email: e.target.value });
+    }
+  }]);
+
+  return Invitation;
+})(_react2["default"].Component);
+
+exports["default"] = Invitation;
+
+Invitation.defaultProps = { email: "" };
+module.exports = exports["default"];
+
+},{"react":282}],327:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29558,7 +29678,7 @@ exports['default'] = Login;
 Login.defaultProps = { account_id: '', password: '' };
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],327:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],328:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29709,7 +29829,7 @@ var Participant = (function (_React$Component2) {
 
 module.exports = exports["default"];
 
-},{"react":282,"react-router":119}],328:[function(require,module,exports){
+},{"react":282,"react-router":119}],329:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29849,7 +29969,7 @@ exports['default'] = Signup;
 Signup.defaultProps = { account_id: '', password: '', email: '', name: '' };
 module.exports = exports['default'];
 
-},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],329:[function(require,module,exports){
+},{"../actions/AuthActions":307,"react":282,"react-router":119,"redux/react":305}],330:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29890,7 +30010,7 @@ var _Group = require('./Group');
 
 exports.Group = _interopRequire(_Group);
 
-},{"./Account":312,"./Application":313,"./Event":314,"./Group":319,"./Groups":324,"./Home":325,"./Login":326,"./Signup":328}],330:[function(require,module,exports){
+},{"./Account":312,"./Application":313,"./Event":314,"./Group":319,"./Groups":324,"./Home":325,"./Login":327,"./Signup":329}],331:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29935,7 +30055,7 @@ exports.CREATE_GROUP_ACTION = CREATE_GROUP_ACTION;
 var INVITE_GROUP_ACTION = 'INVITE_GROUP_ACTION';
 exports.INVITE_GROUP_ACTION = INVITE_GROUP_ACTION;
 
-},{}],331:[function(require,module,exports){
+},{}],332:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -29963,7 +30083,7 @@ var history = new _reactRouterLibBrowserHistory2['default']();
 
 _react2['default'].render(_react2['default'].createElement(_Root2['default'], { history: history }), document.getElementById('app'));
 
-},{"./Root":306,"babel/polyfill":93,"react":282,"react-router/lib/BrowserHistory":98,"react-router/lib/HashHistory":101}],332:[function(require,module,exports){
+},{"./Root":306,"babel/polyfill":93,"react":282,"react-router/lib/BrowserHistory":98,"react-router/lib/HashHistory":101}],333:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29995,7 +30115,7 @@ function auth(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":330}],333:[function(require,module,exports){
+},{"../constants/ActionTypes":331}],334:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30037,7 +30157,7 @@ function events(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":330}],334:[function(require,module,exports){
+},{"../constants/ActionTypes":331}],335:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30071,7 +30191,7 @@ function feeds(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":330}],335:[function(require,module,exports){
+},{"../constants/ActionTypes":331}],336:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30104,7 +30224,7 @@ function groups(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":330}],336:[function(require,module,exports){
+},{"../constants/ActionTypes":331}],337:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30133,7 +30253,7 @@ var _groups = require('./groups');
 
 exports.groups = _interopRequire(_groups);
 
-},{"./auth":332,"./events":333,"./feeds":334,"./groups":335,"./participants":337}],337:[function(require,module,exports){
+},{"./auth":333,"./events":334,"./feeds":335,"./groups":336,"./participants":338}],338:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30171,7 +30291,7 @@ function participants(state, action) {
 
 module.exports = exports['default'];
 
-},{"../constants/ActionTypes":330}],338:[function(require,module,exports){
+},{"../constants/ActionTypes":331}],339:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30249,4 +30369,4 @@ function post(url, body) {
   }, null, this);
 }
 
-},{"isomorphic-fetch":96}]},{},[331]);
+},{"isomorphic-fetch":96}]},{},[332]);

@@ -11,17 +11,18 @@ import * as GroupActions from '../actions/GroupActions';
 export default class Groups extends React.Component {
   constructor(props) {
     super(props);
+    const { dispatch } = this.props;
+    dispatch(GroupActions.fetchAll());
   }
 
   render() {
-    const { groups, events, dispatch } = this.props;
-    let actions = bindActionCreators(GroupActions, dispatch);
+    const { groups, dispatch } = this.props;
 
     return (
       <div className="group">
-        <GroupList groups={groups} {...actions} />
+        <GroupList groups={groups} />
         <div className="col-md-1"></div>
-        <GroupCreator {...actions}/>
+        <GroupCreator {...bindActionCreators(GroupActions, dispatch)}/>
       </div>
     );
   }

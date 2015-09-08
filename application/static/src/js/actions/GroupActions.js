@@ -26,12 +26,12 @@ export function createGroup(group) {
   };
 }
 
-export function inviteGroup(group_id, user_id) {
+export function inviteGroup(group_id, email) {
   return dispatch => {
-    fetchUtils.post('/api/group/invite', { group_id, user_id }).then(json => {
+    fetchUtils.post('/api/group/invite/' + group_id, { email }).then(json => {
       dispatch({
         type: INVITE_GROUP_ACTION,
-        join: {id: json.group.id, join_user: json.join_user}
+        join: {id: json.group_id}
       });
     });
   };

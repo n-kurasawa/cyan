@@ -6,7 +6,7 @@ export default class GroupDetail extends React.Component {
   }
 
   render() {
-    let group = this.findEvent(this.props.group_id);
+    let group = this.props.group;
     if (group) {
       var name = group.name;
       var owner = group.owner.name;
@@ -29,12 +29,5 @@ export default class GroupDetail extends React.Component {
         </div>
       </div>
     );
-  }
-
-  findEvent(id) {
-    let groups = this.props.groups.filter((group)=>{
-      return group.id === +id;
-    });
-    return groups[0];
   }
 }

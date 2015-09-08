@@ -8,4 +8,8 @@ defmodule Api.GroupView do
   def render("create.json", %{group: group}) do
     %{group: group}
   end
+
+  def render("invite.json", %{group_id: group_id}) do
+    %{group_id: group_id}
+  end
 end
